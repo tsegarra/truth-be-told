@@ -1,0 +1,8 @@
+body {
+  padding: 16px;
+  font-family: sans-serif;
+}
+
+li.me {
+  font-weight:bold;
+}
