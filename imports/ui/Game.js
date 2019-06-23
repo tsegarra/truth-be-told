@@ -1,17 +1,32 @@
 import React, { Component } from 'react';
-import { withTracker } from 'meteor/react-meteor-data';
 
-import { Players } from '../api/players.js';
 import Player from './Player.js';
 
-class Game extends Component {
-  renderPlayers() {
-    return this.props.players.map((player) =>
-      <Player key={player._id} player={player} />
-    );
+export default class Game extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      score: {
+        'Tom': 10,
+        'Jill': 15,
+        'Ryan': 9,
+        'Ajma': 0,
+        'Grace': 10,
+      },
+    };
   }
 
   render() {
+    const playerList = this.props.players.map((player) =>
+      <Player
+        key={player._id}
+        name={player.name}
+        score={this.state.score[player.name]}
+        turn={this.props.turn==player.name}
+        me={this.props.me==player.name} />
+    );
+
     return (
       <div className="game-container">
         <h1>{this.props.turn}'s turn</h1>
@@ -27,19 +42,11 @@ class Game extends Component {
 
         <h3>Score</h3>
         <ul>
-          <Player _id="1" name="Tom" score="10" turn="false" me="true" />
-          <Player _id="2" name="Jill" score="15" turn="false" />
-          <Player _id="3" name="Ryan" score="9" turn="false" />
-          <Player _id="4" name="Ajma" score="0" turn="true" />
-          <Player _id="5" name="Grace" score="10" turn="false" />
+          {playerList}
         </ul>
+
+        <button onClick={this.props.logout}>Log out</button>
       </div>
     );
   }
 }
-
-export default withTracker(() => {
-  return {
-    players: Players.find({}).fetch(),
-  };
-})(Game);
