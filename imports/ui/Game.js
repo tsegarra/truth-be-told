@@ -31,7 +31,6 @@ export default class Game extends Component {
       <div className="game-container">
         <h1>{this.props.turn}'s turn</h1>
 
-        <h2>Card</h2>
         <div className="card">
           <p>I would go back to school for ______.</p>
         </div>

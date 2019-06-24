@@ -6,3 +6,9 @@ body {
 li.me {
   font-weight:bold;
 }
+
+.card {
+  border:1px solid #000;
+  padding:16px;
+  margin-bottom:16px;
+}
