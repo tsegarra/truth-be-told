@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 
 import Player from './Player.js';
 
@@ -7,35 +8,57 @@ export default class Game extends Component {
     super(props);
 
     this.state = {
-      score: {
-        'Tom': 10,
-        'Jill': 15,
-        'Ryan': 9,
-        'Ajma': 0,
-        'Grace': 10,
-      },
+      youHaveAnswered: this.props.answer != '',
+      answer: this.props.me.answer,
     };
+  }
+
+  handleChange() {
+    const answer = ReactDOM.findDOMNode(this.refs.answer).value.trim();
+
+    this.setState({ answer: answer });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const answer = ReactDOM.findDOMNode(this.refs.answer).value.trim();
+
+    if (answer != '') {
+      this.props.setAnswer(this.props.me, answer);
+      this.setState({ youHaveAnswered: true, answer: answer });
+    }
   }
 
   render() {
     const playerList = this.props.players.map((player) =>
       <Player
         key={player._id}
-        name={player.name}
-        score={this.state.score[player.name]}
+        player={player}
         turn={this.props.turn==player.name}
-        me={this.props.me==player.name} />
+        me={this.props.me.name==player.name} />
     );
 
     return (
       <div className="game-container">
-        <h1>{this.props.turn}'s turn</h1>
+        <h3>{this.props.turn}'s turn</h3>
 
         <div className="card">
           <p>I would go back to school for ______.</p>
         </div>
 
-        <input name="answer" placeholder="Type your answer here" />
+        { !this.state.youHaveAnswered ?
+          <form onSubmit={this.handleSubmit.bind(this)}><input
+            ref="answer"
+            value={this.state.answer}
+            onChange={this.handleChange.bind(this)}
+            placeholder={this.props.turn==this.props.me.name ? "Type your answer here" : "Type an answer for " + this.props.turn + " here" } />
+          <input type="submit" value="Save" /></form> :
+          <div>
+            <h3>Answer: {this.state.answer}</h3>
+            <button onClick={() => {this.setState({ youHaveAnswered: false }); }}>Edit Answer</button>
+          </div>
+        }
 
         <p>Still waiting for answers from Tom, Ryan, and Ajma.</p>
 
@@ -44,6 +67,7 @@ export default class Game extends Component {
           {playerList}
         </ul>
 
+        <button onClick={this.props.nextTurn}>Next turn</button>
         <button onClick={this.props.logout}>Log out</button>
       </div>
     );

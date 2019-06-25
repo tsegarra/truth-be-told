@@ -12,12 +12,15 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: '',
+      user: null,
       gameBegun: false,
+      turnId: 0,
     };
 
     this.setUser = this.setUser.bind(this);
+    this.setAnswer = this.setAnswer.bind(this);
     this.logout = this.logout.bind(this);
+    this.nextTurn = this.nextTurn.bind(this);
     this.startGame = this.startGame.bind(this);
   }
 
@@ -28,7 +31,15 @@ class App extends Component {
   }
 
   logout() {
-    this.setState({ user: ''});
+    this.setState({ user: null });
+  }
+
+  nextTurn() {
+    this.setState((state) => {
+      return {
+        turnId: (state.turnId + 1) % this.props.players.length
+      }
+    });
   }
 
   handleSubmit(event) {
@@ -37,7 +48,8 @@ class App extends Component {
     const newUserName = ReactDOM.findDOMNode(this.refs.newUserName).value.trim();
 
     Players.insert({
-      name: newUserName
+      name: newUserName,
+      score: 0,
     });
 
     ReactDOM.findDOMNode(this.refs.newUserName).value = '';
@@ -50,7 +62,12 @@ class App extends Component {
   startGame() {
     this.setState({
       gameBegun: true,
-      turn: this.props.players[0].name,
+    });
+  }
+
+  setAnswer(user, answer) {
+    Players.update(user._id, {
+      $set: { answer: answer },
     });
   }
 
@@ -61,15 +78,17 @@ class App extends Component {
           <Game
             players={this.props.players}
             logout={this.logout}
+            nextTurn={this.nextTurn}
             me={this.state.user}
-            turn={this.state.turn} />
+            setAnswer={this.setAnswer}
+            turn={this.props.players[this.state.turnId].name} />
         </div>
       );
     } else {
       const playerListItems = this.props.players.map((player) => 
         <li key={player._id}>
-          <button onClick={() => {this.setUser(player.name)}}>{player.name}</button>
-          { this.state.user == player.name ? <span>!</span> : '' }
+          <button onClick={() => {this.setUser(player)}}>{player.name}</button>
+          { this.state.user && this.state.user.name == player.name ? <span>!</span> : '' }
           <button onClick={() => {this.deletePlayer(player._id)}}>&times;</button>
         </li>
       );
