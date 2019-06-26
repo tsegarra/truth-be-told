@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { withTracker } from 'meteor/react-meteor-data';
+
+import { Players } from '../api/players.js';
 
 class StartGameButton extends Component {
   render() {
@@ -38,7 +41,7 @@ class PreGameScreen extends Component {
         <li key={player._id}>
           <button 
               className={ userSelected ? 'selected' : '' }
-              onClick={() => {this.props.setUser(player)}}>
+              onClick={() => {this.props.setCurrentUser(player)}}>
             {player.name}
           </button>
           <button onClick={() => {this.deletePlayer(player)}}>&times;</button>
