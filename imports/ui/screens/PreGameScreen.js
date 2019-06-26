@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { withTracker } from 'meteor/react-meteor-data';
 
-import { Players } from '../api/players.js';
+import { Players } from '../../api/players.js';
 
 class StartGameButton extends Component {
   render() {
