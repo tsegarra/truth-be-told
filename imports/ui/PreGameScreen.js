@@ -11,12 +11,23 @@ class StartGameButton extends Component {
   }
 }
 
-export default class PreGameScreen extends Component {
+class PreGameScreen extends Component {
+  deletePlayer(player) {
+    Players.remove(player._id);
+  }
+
+  createPlayer(name) {
+    Players.insert({
+      name: name,
+      score: 0,
+    });
+  }
+
   handleUserSubmit(event) {
     event.preventDefault();
 
     const newUserName = ReactDOM.findDOMNode(this.refs.newUserName).value.trim();
-    this.props.createPlayer(newUserName);
+    this.createPlayer(newUserName);
     ReactDOM.findDOMNode(this.refs.newUserName).value = '';
   }
 
@@ -30,7 +41,7 @@ export default class PreGameScreen extends Component {
               onClick={() => {this.props.setUser(player)}}>
             {player.name}
           </button>
-          <button onClick={() => {this.props.deletePlayer(player)}}>&times;</button>
+          <button onClick={() => {this.deletePlayer(player)}}>&times;</button>
         </li>
       );
     });
@@ -54,3 +65,9 @@ export default class PreGameScreen extends Component {
     );
   }
 }
+
+export default withTracker(() => {
+  return {
+    players: Players.find({}).fetch(),
+  };
+})(PreGameScreen);
