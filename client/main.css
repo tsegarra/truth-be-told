@@ -3,6 +3,10 @@ body {
   font-family: sans-serif;
 }
 
+button.selected {
+  font-weight:bold;
+}
+
 li.me {
   font-weight:bold;
 }

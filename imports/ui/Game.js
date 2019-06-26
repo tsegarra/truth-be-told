@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 
 import { withTracker } from 'meteor/react-meteor-data';
 import { Players } from '../api/players.js';
+
+import PreGameScreen from './PreGameScreen.js';
 
 class Game extends Component {
   constructor(props) {
@@ -16,8 +17,6 @@ class Game extends Component {
       turnId: 0,
     };
 
-    this.setUser = this.setUser.bind(this);
-    this.startGame = this.startGame.bind(this);
     this.persistAnswer = this.persistAnswer.bind(this);
     this.logout = this.logout.bind(this);
     this.nextTurn = this.nextTurn.bind(this);
@@ -32,39 +31,12 @@ class Game extends Component {
     });
   }
 
-  setUser(user) {
-    this.setState({
-      currentUser: user,
-    });
-  }
-
-  startGame() {
-    this.setState({ gameBegun: true });
-  }
-
   logout() {
     this.setState({ currentUser: null });
   }
 
   handleChange(event) {
     this.setState({ answer: event.target.value });
-  }
-
-  handleUserSubmit(event) {
-    event.preventDefault();
-
-    const newUserName = ReactDOM.findDOMNode(this.refs.newUserName).value.trim();
-
-    Players.insert({
-      name: newUserName,
-      score: 0,
-    });
-
-    ReactDOM.findDOMNode(this.refs.newUserName).value = '';
-  }
-
-  deletePlayer(id) {
-    Players.remove(id);
   }
 
   persistAnswer() {
@@ -115,26 +87,15 @@ class Game extends Component {
         </div>
       );
     } else {
-      const playerListItems = this.props.players.map((player) => 
-        <li key={player._id}>
-          <button onClick={() => {this.setUser(player)}}>{player.name}</button>
-          { this.state.currentUser && this.state.currentUser.name == player.name ? <span>!</span> : '' }
-          <button onClick={() => {this.deletePlayer(player._id)}}>&times;</button>
-        </li>
-      );
-
       return (
-        <div className="login-container">
-          <h1>Select your name, or add new</h1>
-          <ul>
-            {playerListItems}
-          </ul>
-          <form onSubmit={this.handleUserSubmit.bind(this)}>
-            <input ref="newUserName" placeholder="New player" />
-            <input type="submit" value="Add new player" />
-          </form>
-          { this.state.currentUser ? <p><button onClick={this.startGame}>All users submitted</button></p> : '' }
-        </div>
+        <PreGameScreen
+          players={this.props.players}
+          currentUser={this.state.currentUser}
+          setUser={(user) => {this.setState({ currentUser: user })}}
+          deletePlayer={(player) => {Players.remove(player._id)}}
+          createPlayer={(name) => {Players.insert({name: name, score: 0})}}
+          startGame={() => {this.setState({ gameBegun: true })}}
+          />
       );
     }
   }
