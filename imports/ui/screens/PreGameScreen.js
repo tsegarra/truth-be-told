@@ -51,7 +51,7 @@ class PreGameScreen extends Component {
 
     return (
       <div className="login-container">
-        <h1>Select your name, or add new</h1>
+        <p>Select your name, or add new</p>
         <ul>
           {playerListItems}
         </ul>
