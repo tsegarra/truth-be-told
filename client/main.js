@@ -42,7 +42,7 @@ function generateNewPlayer(game, name) {
     gameID: game._id,
     name: name,
     turn: false,
-    answer: '',
+    answer: null,
   };
 
   var playerID = Players.insert(player);
@@ -56,6 +56,25 @@ function getCurrentGame() {
   if (gameID) {
     return Games.findOne(gameID);
   }
+}
+
+function getAllPlayers() {
+  var game = getCurrentGame();
+  var currentPlayer = getCurrentPlayer();
+
+  if (!game) {
+    return null;
+  }
+
+  var players = Players.find({ 'gameID': game._id }, {'sort': {'createdAt': 1}}).fetch();
+
+  players.forEach(function(player) {
+    if (player._id === currentPlayer._id) {
+      player.isCurrent = true;
+    }
+  });
+
+  return players;
 }
 
 function leaveGame() {
@@ -197,22 +216,7 @@ Template.lobby.helpers({
     return getCurrentPlayer();
   },
   players: function() {
-    var game = getCurrentGame();
-    var currentPlayer = getCurrentPlayer();
-
-    if (!game) {
-      return null;
-    }
-
-    var players = Players.find({ 'gameID': game._id }, {'sort': {'createdAt': 1}}).fetch();
-
-    players.forEach(function(player) {
-      if (player._id === currentPlayer._id) {
-        player.isCurrent = true;
-      }
-    });
-
-    return players;
+    return getAllPlayers();
   },
   isLoading: function() {
     var game = getCurrentGame();
@@ -240,25 +244,32 @@ Template.lobby.events({
 Template.gameView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
-  card: 'Truth be told, I am a giant ___.',
-  myAnswer: function() {
-    var answer = Session.get('myAnswer');
-    if (answer) return answer;
-    return 'no answer yet';
+  players: function() {
+    return getAllPlayers();
   },
+  card: 'Truth be told, I am a giant ___.',
 });
 
 Template.gameView.events({
   'submit #card-form': function() {
     var answer = event.target.answer.value;
-    if (!answer) return false;
+    if (!answer) {
+      FlashMessages.sendError('Please enter an answer.');
+      return false;
+    }
 
     var player = getCurrentPlayer();
-    Players.update(player._id, {$set: {answer: answer}});
+    Players.update(player._id, {$set: {
+      answer: answer,
+      duplicate: false,
+    }});
 
-    //Session.set('myAnswer', answer);
-
-    // @TODO update the UI depending on whose answers are in.
+    return false;
+  },
+  'click .btn-change-answer': function(event) {
+    var player = getCurrentPlayer();
+    Players.update(player._id, {$set: {previousAnswer: player.answer}});
+    Players.update(player._id, {$set: {answer: null}});
     return false;
   },
 });
@@ -277,7 +288,6 @@ function trackGameState() {
   if (!game || !player) {
     Session.set('gameID', null);
     Session.set('playerID', null);
-    Session.set('myAnswer', null);
     Session.set('currentView', 'startMenu');
     return;
   }
@@ -286,6 +296,9 @@ function trackGameState() {
     Session.set('currentView', 'gameView');
   } else if (game.state === 'waitingForPlayers') {
     Session.set('currentView', 'lobby');
+  } else if (game.state === 'voting') {
+    Session.set('currentView', 'voteView');
+    // @TODO program the vote view.
   }
 }
 

@@ -100,15 +100,14 @@
 </template>
 
 <template name="gameView">
-  {{#if player.answer }}
-    <h1>this player has answered</h1>
-  {{else}}
-    <h1>you have not answered</h1>
+  {{#if player.duplicate }}
+    <h3>Your answer was a duplicate. Choose another.</h3>
   {{/if}}
-  <hr>
-  {{#if myAnswer }}
-    <h2>you have answered</h2>
-    <h1>{{ myAnswer }}</h1>
+
+  {{#if player.answer }}
+    <p class="card">{{ card }}</p>
+    <p><strong>{{ player.answer }} (Answer for {{ game.turn }})</strong></p>
+    <a href="#" class="btn-change-answer">Edit</a>
   {{ else }}
     <h3 class="player-status">
       {{#if player.isTurn}}
@@ -120,8 +119,25 @@
 
     <form id="card-form">
       <p class="card-text">{{ card }}</p>
-      <input type="text" id="answer" name="answer" autocomplete="off" />
+      <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
       <input type="submit" value="Done" />
     </form>
   {{/if}}
+
+  <h3>Waiting for:</h3>
+  <ul class="players">
+    {{#each players}}
+      {{#unless this.answer }}
+        {{# if this.isCurrent }}
+          <li>You</li>
+        {{ else }}
+          <li>{{ this.name }}</li>
+        {{/if}}
+      {{/unless}}
+    {{/each}}
+  </ul>
+</template>
+
+<template name="voteView">
+  <h1>voting</h1>
 </template>
