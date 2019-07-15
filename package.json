@@ -1,5 +1,5 @@
 {
-  "name": "truth-be-told",
+  "name": "tbt",
   "private": true,
   "scripts": {
     "start": "meteor run",
@@ -9,9 +9,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.3.4",
-    "meteor-node-stubs": "^0.4.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "meteor-node-stubs": "^0.4.1"
   },
   "meteor": {
     "mainModule": {

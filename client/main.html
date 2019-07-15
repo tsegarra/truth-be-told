@@ -2,6 +2,126 @@
   <title>Truth Be Told</title>
 </head>
 
-<body>
-  <div id="render-target"></div>
-</body>
+<body></body>
+
+<template name="main">
+  <div class="main-content">
+    {{> Template.dynamic template=whichView}}
+  </div>
+</template>
+
+<template name="startMenu">
+  <h4>Truth Be Told</h4>
+
+  <div class="button-container">
+    <button id="btn-new-game">New Game</button>
+    <button id="btn-join-game">Join Game</button>
+  </div>
+</template>
+
+<template name="createGame">
+  <h4>
+    {{#if isLoading }}
+      <span class="spinner">Loading...</span>
+    {{else}}
+      Truth Be Told
+    {{/if}}
+  </h4>
+
+  <form id="create-game">
+    <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
+    <div class="button-container">
+      <input type="submit" value="Create game" />
+      <button class="btn-back">Back</button>
+    </div>
+  </form>
+</template>
+
+<template name="joinGame">
+  <h4>
+    {{#if isLoading }}
+      <span class="spinner">Loading...</span>
+    {{else}}
+      Truth Be Told
+    {{/if}}
+  </h4>
+  <hr />
+
+  <form id="join-game">
+    <input autocomplete="off" type="text" id="access-code" name="accessCode" placeholder="Enter an access code" />
+    <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
+
+    <div class="button-container">
+      <input type="submit" value="Join" />
+      <button class="btn-back">Back</button>
+    </div>
+  </form>
+</template>
+
+<template name="lobby">
+  <h4>
+    {{#if isLoading }}
+      <span class="spinner">Loading...</span>
+    {{else}}
+      Truth Be Told
+    {{/if}}
+  </h4>
+
+  <div class="access-code">
+    Access code: <span>{{ game.accessCode }}</span>
+  </div>
+
+  <hr />
+
+  <ol class="lobby-player-list">
+    {{#each players}}
+      <li>
+        {{ name }}
+
+        {{#if isCurrent }}
+          <a href="#" class="btn-edit-player" data-player-id="{{_id}}">
+            <i class="fa fa-pencil">Edit<!--(TODO-FA)--></i>
+          </a>
+        {{else}}
+          <a href="#" class="btn-remove-player" data-player-id="{{_id}}">
+            <i class="fa fa-close">&times;</i>
+          </a>
+        {{/if}}
+      </li>
+    {{/each}}
+  </ol>
+
+  <hr />
+
+  <div class="button-container">
+    <button class="btn-start">Start game</button>
+    <button class="btn-leave">Leave game</button>
+  </div>
+</template>
+
+<template name="gameView">
+  {{#if player.answer }}
+    <h1>this player has answered</h1>
+  {{else}}
+    <h1>you have not answered</h1>
+  {{/if}}
+  <hr>
+  {{#if myAnswer }}
+    <h2>you have answered</h2>
+    <h1>{{ myAnswer }}</h1>
+  {{ else }}
+    <h3 class="player-status">
+      {{#if player.isTurn}}
+        Write an answer for yourself.
+      {{else}}
+        Write an answer that applies to {{ game.turn }}.
+      {{/if}}
+    </h3>
+
+    <form id="card-form">
+      <p class="card-text">{{ card }}</p>
+      <input type="text" id="answer" name="answer" autocomplete="off" />
+      <input type="submit" value="Done" />
+    </form>
+  {{/if}}
+</template>
