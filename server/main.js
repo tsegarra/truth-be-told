@@ -66,3 +66,46 @@ Players.find({'answer': null}).observeChanges({
     }
   },
 });
+
+Players.find({'vote': null}).observeChanges({
+  removed: function(id) {
+    var currentPlayer = Players.findOne({_id: id});
+    var numPlayersWithoutVotes = Players.find({gameID: currentPlayer.gameID, 'vote': null}).count();
+    if (numPlayersWithoutVotes <= 1) {
+      Games.update(currentPlayer.gameID, { $set: {
+        state: 'scoring',
+      }});
+    }
+  },
+});
+
+Games.find({'state': 'scoring'}).observeChanges({
+  added: function (id, state) {
+    var players = Players.find({gameID: id});
+    players.forEach(function(player) {
+      // @TODO scores not correct -- there's a race condition here.
+      if (!player.isTurn) {
+        if (player.vote.isTurn) {
+          console.log('adding 1 to ' + player.name + '\'s score which was ' + player.score);
+          Players.update(player._id, { $set: {
+            score: player.score + 1,
+          }});
+        }
+        console.log('adding 1 to ' + player.vote.name + '\'s score which was ' + player.vote.score);
+        Players.update(player.vote._id, { $set: {
+          score: player.vote.score + 1,
+        }});
+      }
+    });
+
+    players.forEach(function(player) {
+      if (player.score >= 20) {
+        // @TODO end game
+      }
+    });
+
+    Games.update(id, {$set: {
+      state: 'results',
+    }});
+  },
+});

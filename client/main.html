@@ -139,7 +139,10 @@
 </template>
 
 <template name="voteView">
-  <h1>Voting</h1>
+  {{#if isLoading }}
+    <h4><span class="spinner">Loading...</span></h4>
+  {{/if}}
+
   {{#if player.isTurn }}
     <h3>It is your turn. Here are the cards. Read them to yourself before reading them aloud.</h3>
     <!-- @TODO randomize these -->
@@ -170,12 +173,52 @@
       <ul>
         <!-- @TODO should this show the person's own answer? -->
         {{#each players}}
-          <li><a href="#" class="btn-vote">{{ this.answer }}</a></li>
-          <!-- @TOD
+          <li>
+            <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
+            {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+          </li>
         {{/each}}
       </ul>
     {{else}}
       <h3>Waiting for cards to be read aloud.</h3>
     {{/if}}
+  {{/if}}
+</template>
+
+<template name="resultsView">
+  {{#if player.isTurn }}
+    <h1>Round complete.</h1>
+    <p>{{card}}</p>
+    {{#each players}}
+      {{#if this.isTurn }}
+        <h2>{{this.name}}: {{this.answer}}</h2>
+      {{/if}}
+    {{/each}}
+    <ul>
+      {{#each players}}
+        {{#unless this.isTurn}}
+          <li>{{ this.name }}: {{this.answer}}</li>
+        {{/unless}}
+      {{/each}}
+    </ul>
+    <ul>
+      {{#each players}}
+        {{#unless this.isTurn}}
+          <li>
+            {{ this.name }} picked {{ this.vote.name }}'s answer.
+            (+1 for {{ this.vote.name }})
+            {{#if this.vote.isTurn}}(+1 for {{this.name}}){{/if}}
+          </li>
+        {{/unless}}
+      {{/each}}
+    </ul>
+    <ul>
+      {{#each players}}
+        <li>{{ this.name }} &mdash; {{ this.score }}</li>
+      {{/each}}
+    </ul>
+    <a href="#" class="btn-next-round">Next</a>
+  {{else}}
+    <h1>Round complete! Waiting for {{ game.turn }} to read the results.</h1>
   {{/if}}
 </template>

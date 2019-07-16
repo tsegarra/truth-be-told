@@ -45,6 +45,7 @@ function generateNewPlayer(game, name) {
     turn: false,
     answer: null,
     vote: null,
+    score: 0,
   };
 
   var playerID = Players.insert(player);
@@ -164,6 +165,7 @@ Template.createGame.events({
 });
 
 Template.joinGame.events({
+  // @TODO disallow duplicate names
   'submit #join-game': function (event) {
     var accessCode = event.target.accessCode.value;
     var playerName = event.target.playerName.value;
@@ -226,7 +228,7 @@ Template.lobby.helpers({
   },
   isLoading: function() {
     var game = getCurrentGame();
-    return game.state === 'settingUp';
+    return game.state === 'settingUp' || game.state === 'scoring';
   },
 });
 
@@ -246,6 +248,10 @@ Template.lobby.events({
     Session.set('currentView', 'joinGame');
   },
 });
+
+Template.gameView.rendered = function() {
+  $('#answer').focus();
+};
 
 Template.gameView.helpers({
   game: getCurrentGame,
@@ -283,12 +289,34 @@ Template.voteView.helpers({
   player: getCurrentPlayer,
   players: getAllPlayers,
   card: getCurrentCard,
+  equals: function(a, b) { return a === b; },
 });
 
 Template.voteView.events({
   'click .btn-show-cards': function(event) {
     var game = getCurrentGame();
     Games.update(game._id, {$set: {cardsBeenRead: true}});
+    return false;
+  },
+  'click .btn-vote': function(event) {
+    var player = getCurrentPlayer();
+    var id = $(event.target).attr('data-id');
+    var playerVotedFor = Players.findOne(id);
+    Players.update(player._id, {$set: {vote: playerVotedFor}});
+    return false;
+  },
+});
+
+Template.resultsView.helpers({
+  game: getCurrentGame,
+  player: getCurrentPlayer,
+  players: getAllPlayers,
+  card: getCurrentCard,
+});
+
+Template.resultsView.events({
+  'click .btn-next-round': function(event) {
+    // @TODO move to next round
     return false;
   },
 });
@@ -311,13 +339,15 @@ function trackGameState() {
     return;
   }
 
+  // @TODO let the facilitator decide if there are duplicates.
   if (game.state === 'inProgress') {
     Session.set('currentView', 'gameView');
   } else if (game.state === 'waitingForPlayers') {
     Session.set('currentView', 'lobby');
   } else if (game.state === 'voting') {
     Session.set('currentView', 'voteView');
-    // @TODO program the vote view.
+  } else if (game.state === 'results') {
+    Session.set('currentView', 'resultsView');
   }
 }
 
