@@ -139,5 +139,43 @@
 </template>
 
 <template name="voteView">
-  <h1>voting</h1>
+  <h1>Voting</h1>
+  {{#if player.isTurn }}
+    <h3>It is your turn. Here are the cards. Read them to yourself before reading them aloud.</h3>
+    <!-- @TODO randomize these -->
+    <p><strong>{{ card }}</strong></p>
+    <ul>
+      {{#each players}}
+        <li><strong>{{ this.name }}</strong>: {{ this.answer }}</li>
+      {{/each}}
+    </ul>
+    {{#if game.cardsBeenRead}}
+      <h3>Waiting for votes to be cast by:</h3>
+      <ul>
+        {{#each players}}
+          {{#unless this.vote}}
+            {{#unless this.isTurn}}
+              <li>{{ this.name }}</li>
+            {{/unless}}
+          {{/unless}}
+        {{/each}}
+      </ul>
+    {{else}}
+      <a href="#" class="btn-show-cards">The cards have all been read</a>
+    {{/if}}
+  {{else}}
+    {{#if game.cardsBeenRead}}
+      <h3>Click the card you think belongs to {{ game.turn }}.</h3>
+      <p>{{ card }}</p>
+      <ul>
+        <!-- @TODO should this show the person's own answer? -->
+        {{#each players}}
+          <li><a href="#" class="btn-vote">{{ this.answer }}</a></li>
+          <!-- @TOD
+        {{/each}}
+      </ul>
+    {{else}}
+      <h3>Waiting for cards to be read aloud.</h3>
+    {{/if}}
+  {{/if}}
 </template>

@@ -29,6 +29,7 @@ function generateNewGame() {
     accessCode: generateAccessCode(),
     state: 'waitingForPlayers',
     currentCard: null,
+    cardsBeenRead: false,
   };
 
   var gameID = Games.insert(game);
@@ -43,6 +44,7 @@ function generateNewPlayer(game, name) {
     name: name,
     turn: false,
     answer: null,
+    vote: null,
   };
 
   var playerID = Players.insert(player);
@@ -75,6 +77,10 @@ function getAllPlayers() {
   });
 
   return players;
+}
+
+function getCurrentCard() {
+  return 'Truth be told, I am very ___.';
 }
 
 function leaveGame() {
@@ -244,10 +250,8 @@ Template.lobby.events({
 Template.gameView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
-  players: function() {
-    return getAllPlayers();
-  },
-  card: 'Truth be told, I am a giant ___.',
+  players: getAllPlayers,
+  card: getCurrentCard,
 });
 
 Template.gameView.events({
@@ -270,6 +274,21 @@ Template.gameView.events({
     var player = getCurrentPlayer();
     Players.update(player._id, {$set: {previousAnswer: player.answer}});
     Players.update(player._id, {$set: {answer: null}});
+    return false;
+  },
+});
+
+Template.voteView.helpers({
+  game: getCurrentGame,
+  player: getCurrentPlayer,
+  players: getAllPlayers,
+  card: getCurrentCard,
+});
+
+Template.voteView.events({
+  'click .btn-show-cards': function(event) {
+    var game = getCurrentGame();
+    Games.update(game._id, {$set: {cardsBeenRead: true}});
     return false;
   },
 });
