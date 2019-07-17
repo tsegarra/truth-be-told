@@ -28,8 +28,9 @@ function generateNewGame() {
   var game = {
     accessCode: generateAccessCode(),
     state: 'waitingForPlayers',
-    currentCard: null,
+    currentCard: null, // @TODO change cards
     cardsBeenRead: false,
+    turn: null,
   };
 
   var gameID = Games.insert(game);
@@ -42,7 +43,7 @@ function generateNewPlayer(game, name) {
   var player = {
     gameID: game._id,
     name: name,
-    turn: false,
+    isTurn: false,
     answer: null,
     vote: null,
     score: 0,
@@ -228,7 +229,7 @@ Template.lobby.helpers({
   },
   isLoading: function() {
     var game = getCurrentGame();
-    return game.state === 'settingUp' || game.state === 'scoring';
+    return game.state === 'settingUp';
   },
 });
 
@@ -316,7 +317,9 @@ Template.resultsView.helpers({
 
 Template.resultsView.events({
   'click .btn-next-round': function(event) {
-    // @TODO move to next round
+    // @TODO log everything
+    var game = getCurrentGame();
+    Games.update(game._id, {$set: {state: 'settingUpNextRound'}});
     return false;
   },
 });

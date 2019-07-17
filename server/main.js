@@ -82,21 +82,22 @@ Players.find({'vote': null}).observeChanges({
 Games.find({'state': 'scoring'}).observeChanges({
   added: function (id, state) {
     var players = Players.find({gameID: id});
+    var scores = {};
     players.forEach(function(player) {
-      // @TODO scores not correct -- there's a race condition here.
+      scores[player._id] = player.score;
+    });
+    players.forEach(function(player) {
       if (!player.isTurn) {
-        if (player.vote.isTurn) {
-          console.log('adding 1 to ' + player.name + '\'s score which was ' + player.score);
-          Players.update(player._id, { $set: {
-            score: player.score + 1,
-          }});
-        }
-        console.log('adding 1 to ' + player.vote.name + '\'s score which was ' + player.vote.score);
-        Players.update(player.vote._id, { $set: {
-          score: player.vote.score + 1,
-        }});
+        if (player.vote.isTurn) scores[player._id]++;
+        scores[player.vote._id]++;
       }
     });
+    var playerIds = Object.keys(scores);
+    for (var i = 0; i < playerIds.length; i++) {
+      Players.update(playerIds[i], { $set: {
+        score: scores[playerIds[i]],
+      }});
+    }
 
     players.forEach(function(player) {
       if (player.score >= 20) {
@@ -104,8 +105,33 @@ Games.find({'state': 'scoring'}).observeChanges({
       }
     });
 
-    Games.update(id, {$set: {
-      state: 'results',
+    Games.update(id, {$set: { state: 'results' }});
+  },
+});
+
+Games.find({'state': 'settingUpNextRound'}).observeChanges({
+  added: function (id, state) {
+    var players = Players.find({ 'gameID': id }, {'sort': {'createdAt': 1}});
+    var turnIndex, nextTurnIndex;
+    players.forEach(function(player, index) {
+      if (player.isTurn) turnIndex = index;
+    });
+    nextTurnIndex = (turnIndex + 1) % players.count();
+
+    var turnName;
+    players.forEach(function(player, index) {
+      Players.update(player._id, { $set: {
+        answer: null,
+        vote: null,
+        isTurn: index === nextTurnIndex,
+      }});
+      if (index === nextTurnIndex) turnName = player.name;
+    });
+
+    Games.update(id, { $set: {
+      cardsBeenRead: false,
+      state: 'inProgress',
+      turn: turnName,
     }});
   },
 });
