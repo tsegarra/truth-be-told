@@ -105,7 +105,7 @@
   {{/if}}
 
   {{#if player.answer }}
-    <p class="card">{{ card }}</p>
+    <p class="card">{{ game.card }}</p>
     <p><strong>{{ player.answer }} (Answer for {{ game.turn }})</strong></p>
     <a href="#" class="btn-change-answer">Edit</a>
   {{ else }}
@@ -118,7 +118,7 @@
     </h3>
 
     <form id="card-form">
-      <p class="card-text">{{ card }}</p>
+      <p class="card-text">{{ game.card }}</p>
       <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
       <input type="submit" value="Done" />
     </form>
@@ -146,7 +146,7 @@
   {{#if player.isTurn }}
     <h3>It is your turn. Here are the cards. Read them to yourself before reading them aloud.</h3>
     <!-- @TODO randomize these -->
-    <p><strong>{{ card }}</strong></p>
+    <p><strong>{{ game.card }}</strong></p>
     <ul>
       {{#each players}}
         <li><strong>{{ this.name }}</strong>: {{ this.answer }}</li>
@@ -169,7 +169,7 @@
   {{else}}
     {{#if game.cardsBeenRead}}
       <h3>Click the card you think belongs to {{ game.turn }}.</h3>
-      <p>{{ card }}</p>
+      <p>{{ game.card }}</p>
       <ul>
         <!-- @TODO should this show the person's own answer? -->
         {{#each players}}
@@ -188,7 +188,7 @@
 <template name="resultsView">
   {{#if player.isTurn }}
     <h1>Round complete.</h1>
-    <p>{{card}}</p>
+    <p>{{game.card}}</p>
     {{#each players}}
       {{#if this.isTurn }}
         <h2>{{this.name}}: {{this.answer}}</h2>

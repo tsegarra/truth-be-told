@@ -2,6 +2,7 @@ import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 
 import '../lib/collections.js';
+import '../lib/cards.js';
 
 import './main.html';
 
@@ -28,7 +29,7 @@ function generateNewGame() {
   var game = {
     accessCode: generateAccessCode(),
     state: 'waitingForPlayers',
-    currentCard: null, // @TODO change cards
+    card: Cards[Math.floor(Math.random()*Cards.length)],
     cardsBeenRead: false,
     turn: null,
   };
@@ -79,10 +80,6 @@ function getAllPlayers() {
   });
 
   return players;
-}
-
-function getCurrentCard() {
-  return 'Truth be told, I am very ___.';
 }
 
 function leaveGame() {
@@ -258,7 +255,6 @@ Template.gameView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
   players: getAllPlayers,
-  card: getCurrentCard,
 });
 
 Template.gameView.events({
@@ -289,7 +285,6 @@ Template.voteView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
   players: getAllPlayers,
-  card: getCurrentCard,
   equals: function(a, b) { return a === b; },
 });
 
@@ -312,7 +307,6 @@ Template.resultsView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
   players: getAllPlayers,
-  card: getCurrentCard,
 });
 
 Template.resultsView.events({

@@ -1,6 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 
 import '../lib/collections.js';
+import '../lib/cards.js';
 
 Meteor.startup(() => {
   Games.remove({});
@@ -129,6 +130,7 @@ Games.find({'state': 'settingUpNextRound'}).observeChanges({
     });
 
     Games.update(id, { $set: {
+      card: Cards[Math.floor(Math.random()*Cards.length)],
       cardsBeenRead: false,
       state: 'inProgress',
       turn: turnName,
