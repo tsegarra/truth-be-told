@@ -332,6 +332,11 @@ Template.resultsView.events({
     Games.update(game._id, {$set: {state: 'settingUpNextRound'}});
     return false;
   },
+  'click .btn-new-game': function(event) {
+    var game = getCurrentGame();
+    Games.update(game._id, {$set: {state: 'settingUp'}});
+    return false;
+  },
 });
 
 function trackGameState() {

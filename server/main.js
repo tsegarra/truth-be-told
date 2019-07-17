@@ -25,6 +25,9 @@ Games.find({'state': 'settingUp'}).observeChanges({
     players.forEach(function(player, index) {
       Players.update(player._id, {$set: {
         isTurn: index === turnId,
+        answer: null,
+        vote: null,
+        score: 0,
       }});
       if (index === turnId) {
         turnName = player.name;
@@ -34,6 +37,7 @@ Games.find({'state': 'settingUp'}).observeChanges({
     Games.update(id, {$set: {
       state: 'inProgress',
       turn: turnName,
+      cardsBeenRead: false,
     }});
   }
 });
