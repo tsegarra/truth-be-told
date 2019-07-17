@@ -100,13 +100,18 @@ Games.find({'state': 'scoring'}).observeChanges({
       }});
     }
 
+    // @TODO allow multiple winners
+    var winner = null;
     players.forEach(function(player) {
       if (player.score >= 20) {
-        // @TODO end game
+        winner = player;
       }
     });
 
-    Games.update(id, {$set: { state: 'results' }});
+    Games.update(id, {$set: {
+      state: 'results',
+      winner: winner,
+    }});
   },
 });
 

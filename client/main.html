@@ -217,8 +217,17 @@
         <li>{{ this.name }} &mdash; {{ this.score }}</li>
       {{/each}}
     </ul>
-    <a href="#" class="btn-next-round">Next</a>
+    {{# if game.winner }}
+      <h1>{{game.winner.name}} has won!</h1>
+      <!-- @TODO allow restart -->
+    {{else}}
+      <a href="#" class="btn-next-round">Next</a>
+    {{/if}}
   {{else}}
-    <h1>Round complete! Waiting for {{ game.turn }} to read the results.</h1>
+    {{#if game.winner }}
+      <h1>Game complete! {{ game.winner.name }} has won.</h1>
+    {{else}}
+      <h1>Round complete! Waiting for {{ game.turn }} to read the results.</h1>
+    {{/if}}
   {{/if}}
 </template>

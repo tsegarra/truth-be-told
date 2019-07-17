@@ -32,6 +32,7 @@ function generateNewGame() {
     card: Cards[Math.floor(Math.random()*Cards.length)],
     cardsBeenRead: false,
     turn: null,
+    winner: null,
   };
 
   var gameID = Games.insert(game);
