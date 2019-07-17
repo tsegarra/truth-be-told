@@ -184,12 +184,18 @@ Template.joinGame.events({
       var game = Games.findOne({ accessCode: accessCode });
 
       if (game) {
-        Meteor.subscribe('players', game._id);
-        player = generateNewPlayer(game, playerName);
-        
-        Session.set('gameID', game._id);
-        Session.set('playerID', player._id);
-        Session.set('currentView', 'lobby');
+        // for some reason this is not finding the existing player
+        var existingPlayer = Players.findOne({ gameID: game._id, name: playerName });
+        if (existingPlayer) {
+          alert('Player already exists with that name.');
+        } else {
+          Meteor.subscribe('players', game._id);
+          player = generateNewPlayer(game, playerName);
+          
+          Session.set('gameID', game._id);
+          Session.set('playerID', player._id);
+          Session.set('currentView', 'lobby');
+        }
       } else {
         alert('Invalid access code.');
       }
@@ -327,7 +333,6 @@ Template.resultsView.helpers({
 
 Template.resultsView.events({
   'click .btn-next-round': function(event) {
-    // @TODO log everything
     var game = getCurrentGame();
     Games.update(game._id, {$set: {state: 'settingUpNextRound'}});
     return false;
