@@ -32,7 +32,7 @@ function generateNewGame() {
     card: Cards[Math.floor(Math.random()*Cards.length)],
     cardsBeenRead: false,
     turn: null,
-    winner: null,
+    winners: null,
   };
 
   var gameID = Games.insert(game);
@@ -304,10 +304,25 @@ Template.voteView.events({
   },
 });
 
+function getWinningMessage() {
+  var game = getCurrentGame();
+  if (!game.winners) return null;
+  if (game.winners.length == 1) {
+    return game.winners[0].name + ' has won.';
+  }
+  var message = game.winners[0].name;
+  for (var i = 1; i < game.winners.length; i++) {
+    message += ', ' + game.winners[i].name;
+  }
+  message += ' have won.';
+  return message;
+}
+
 Template.resultsView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
   players: getAllPlayers,
+  winningMessage: getWinningMessage,
 });
 
 Template.resultsView.events({
