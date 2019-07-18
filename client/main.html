@@ -170,11 +170,14 @@
       <h3>Click the card you think belongs to {{ game.turn }}.</h3>
       <p>{{ game.card }}</p>
       <ul>
-        <!-- @TODO should this show the person's own answer? -->
         {{#each game.randomPlayers}}
           <li>
-            <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
-            {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+            {{#if equals this._id player._id}}
+              {{ this.answer }}
+            {{else}}
+              <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
+              {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+            {{/if}}
           </li>
         {{/each}}
       </ul>
