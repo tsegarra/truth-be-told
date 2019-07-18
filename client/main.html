@@ -145,10 +145,9 @@
 
   {{#if player.isTurn }}
     <h3>It is your turn. Here are the cards. Read them to yourself before reading them aloud.</h3>
-    <!-- @TODO randomize these -->
     <p><strong>{{ game.card }}</strong></p>
     <ul>
-      {{#each players}}
+      {{#each game.randomPlayers}}
         <li><strong>{{ this.name }}</strong>: {{ this.answer }}</li>
       {{/each}}
     </ul>
@@ -172,7 +171,7 @@
       <p>{{ game.card }}</p>
       <ul>
         <!-- @TODO should this show the person's own answer? -->
-        {{#each players}}
+        {{#each game.randomPlayers}}
           <li>
             <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
             {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}

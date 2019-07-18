@@ -67,6 +67,7 @@ Players.find({'answer': null}).observeChanges({
     if (allAnswersAreIn) {
       Games.update(currentPlayer.gameID, { $set: {
         state: 'voting',
+        randomPlayers: _.shuffle(players.fetch()),
       }});
     }
   },
