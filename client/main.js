@@ -164,7 +164,6 @@ Template.createGame.events({
 });
 
 Template.joinGame.events({
-  // @TODO disallow duplicate names
   'submit #join-game': function (event) {
     var accessCode = event.target.accessCode.value;
     var playerName = event.target.playerName.value;
@@ -184,18 +183,17 @@ Template.joinGame.events({
       var game = Games.findOne({ accessCode: accessCode });
 
       if (game) {
-        // for some reason this is not finding the existing player
-        var existingPlayer = Players.findOne({ gameID: game._id, name: playerName });
-        if (existingPlayer) {
-          alert('Player already exists with that name.');
-        } else {
-          Meteor.subscribe('players', game._id);
-          player = generateNewPlayer(game, playerName);
-          
-          Session.set('gameID', game._id);
-          Session.set('playerID', player._id);
-          Session.set('currentView', 'lobby');
-        }
+        Meteor.subscribe('players', game._id, function onReady() {
+          var existingPlayers = Players.find({ gameID: game._id, name: playerName });
+          if (existingPlayers.count()) {
+            alert('Player already exists with that name.');
+          } else {
+            player = generateNewPlayer(game, playerName);
+            Session.set('gameID', game._id);
+            Session.set('playerID', player._id);
+            Session.set('currentView', 'lobby');
+          }
+        });
       } else {
         alert('Invalid access code.');
       }
