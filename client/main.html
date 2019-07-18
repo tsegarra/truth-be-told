@@ -138,13 +138,33 @@
   </ul>
 </template>
 
+<template name="reviewView">
+  {{#if player.isTurn}}
+    <h3>Review the answers and select duplicates to be returned.</h3>
+    <form id="review-answers">
+      {{#each players}}
+        <div>
+          {{#if this.isTurn}}
+            <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}">[{{this.name}}] {{this.answer}}</label>
+          {{else}}
+            <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}">[{{this.name}}] {{this.answer}}</label>
+          {{/if}}
+        </div>
+      {{/each}}
+      <input type="submit" value="Continue" />
+    </form>
+  {{else}}
+    <h3>Please hold. Answers are under review.</h3>
+  {{/if}}
+</template>
+
 <template name="voteView">
   {{#if isLoading }}
     <h4><span class="spinner">Loading...</span></h4>
   {{/if}}
 
   {{#if player.isTurn }}
-    <h3>It is your turn. Here are the cards. Read them to yourself before reading them aloud.</h3>
+    <h3>It is your turn. Here are the cards. Read them aloud.</h3>
     <p><strong>{{ game.card }}</strong></p>
     <ul>
       {{#each game.randomPlayers}}

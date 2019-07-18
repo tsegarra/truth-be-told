@@ -286,6 +286,42 @@ Template.gameView.events({
   },
 });
 
+Template.reviewView.helpers({
+  player: getCurrentPlayer,
+  players: getAllPlayers,
+});
+
+Template.reviewView.events({
+  'submit #review-answers': function(event) {
+    var game = getCurrentGame();
+    var players = getAllPlayers();
+    var isDuplicate, anyDuplicates = false;
+    players.forEach(function (player) {
+      isDuplicate = $('#answer-' + player._id).prop('checked');
+      if (isDuplicate) {
+        anyDuplicates = true;
+        Players.update(player._id, {$set: {
+          previousAnswer: player.answer,
+          answer: null,
+          duplicate: true,
+        }});
+      }
+    });
+
+    if (anyDuplicates) {
+      Games.update(game._id, {$set: {
+        state: 'inProgress',
+      }});
+    } else {
+      Games.update(game._id, {$set: {
+        state: 'voting',
+        randomPlayers: _.shuffle(players),
+      }});
+    }
+    return false;
+  },
+});
+
 Template.voteView.helpers({
   game: getCurrentGame,
   player: getCurrentPlayer,
@@ -360,11 +396,12 @@ function trackGameState() {
     return;
   }
 
-  // @TODO let the facilitator decide if there are duplicates.
   if (game.state === 'inProgress') {
     Session.set('currentView', 'gameView');
   } else if (game.state === 'waitingForPlayers') {
     Session.set('currentView', 'lobby');
+  } else if (game.state === 'review') {
+    Session.set('currentView', 'reviewView');
   } else if (game.state === 'voting') {
     Session.set('currentView', 'voteView');
   } else if (game.state === 'results') {
