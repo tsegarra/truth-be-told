@@ -1,4 +1,86 @@
 body {
   padding: 10px;
   font-family: sans-serif;
+  text-align:center;
+}
+
+a.btn-show-cards,
+input[type="submit"],
+button {
+  display:inline-block;
+  background:#fff;
+  border:1px solid;
+  text-transform:uppercase;
+  padding:8px 16px;
+  font-size:12px;
+  color:#6e6e6e;
+  cursor:pointer;
+  margin-bottom:8px;
+}
+
+input[type="text"] {
+  margin-bottom:8px;
+  padding:10px;
+}
+
+h4 {
+  font-weight:normal;
+  font-size:32px;
+}
+
+ol.lobby-player-list {
+  max-width:130px;
+  width:100%;
+  border-top:1px solid #ccc;
+  border-bottom:1px solid #ccc;
+  padding:16px 0 16px 32px;
+  display:inline-block;
+  text-align:left;
+}
+
+/** Header **/
+header {
+  text-align:left;
+}
+
+header > h5 {
+  margin-top:0;
+  font-weight:normal;
+}
+
+/** Game View **/
+.gameplay-container {
+  padding:16px;
+  border:1px solid #a7a7a7;
+  max-width:400px;
+  width:100%;
+  display:inline-block;
+  box-sizing:border-box;
+}
+
+.details-container {
+  text-align:left;
+  font-size:16px;
+}
+
+.details-container > p {
+  margin-bottom:8px;
+}
+
+.details-container > ul {
+  margin-top:0;
+}
+
+.answer-checkboxes {
+  text-align:left;
+  margin-bottom:8px;
+}
+
+form#review-answers input[type="submit"] {
+  margin-top:16px;
+  margin-bottom:0;
+}
+
+ul.player-answers {
+  text-align:left;
 }

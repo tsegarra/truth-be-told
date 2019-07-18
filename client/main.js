@@ -16,7 +16,7 @@ function getCurrentPlayer() {
 
 function generateAccessCode() {
   var code = '';
-  var possible = 'afghijkloqrsuwxy23456789';
+  var possible = 'AFGHIJKLOQRSUWXY23456789';
 
   for (let i = 0; i < 6; i++) {
     code += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -173,7 +173,7 @@ Template.joinGame.events({
     }
 
     accessCode = accessCode.trim();
-    accessCode = accessCode.toLowerCase();
+    accessCode = accessCode.toUpperCase();
 
     Session.set('loading', true);
 
@@ -216,7 +216,13 @@ Template.joinGame.helpers({
 Template.joinGame.rendered = function(event) {
   resetUserState();
 
-  $('#access-code').focus();
+  var urlAccessCode = Session.get('urlAccessCode');
+  if (urlAccessCode) {
+    $('#access-code').val(urlAccessCode);
+    $('#player-name').focus();
+  } else {
+    $('#access-code').focus();
+  }
 };
 
 Template.lobby.helpers({
@@ -249,6 +255,7 @@ Template.lobby.events({
   'click .btn-edit-player': function(event) {
     var game = getCurrentGame();
     Session.set('currentView', 'joinGame');
+    Session.set('urlAccessCode', game.accessCode);
   },
 });
 

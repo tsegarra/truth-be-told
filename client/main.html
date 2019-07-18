@@ -71,8 +71,6 @@
     Access code: <span>{{ game.accessCode }}</span>
   </div>
 
-  <hr />
-
   <ol class="lobby-player-list">
     {{#each players}}
       <li>
@@ -91,8 +89,6 @@
     {{/each}}
   </ol>
 
-  <hr />
-
   <div class="button-container">
     <button class="btn-start">Start game</button>
     <button class="btn-leave">Leave game</button>
@@ -100,79 +96,104 @@
 </template>
 
 <template name="gameView">
-  {{#if player.duplicate }}
-    <h3>Your answer was a duplicate. Choose another.</h3>
-  {{/if}}
+  {{> inGameHeader }}
 
-  {{#if player.answer }}
-    <p class="card">{{ game.card }}</p>
-    <p><strong>{{ player.answer }} (Answer for {{ game.turn }})</strong></p>
-    <a href="#" class="btn-change-answer">Edit</a>
-  {{ else }}
-    <h3 class="player-status">
-      {{#if player.isTurn}}
-        Write an answer for yourself.
-      {{else}}
-        Write an answer that applies to {{ game.turn }}.
-      {{/if}}
-    </h3>
+  <div class="instruction-container">
+    {{#if player.duplicate }}
+      <p class="duplicate-message">Your answer is a duplicate and was returned to you by {{ game.turn }}.</p>
+    {{/if}}
 
-    <form id="card-form">
-      <p class="card-text">{{ game.card }}</p>
-      <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
-      <input type="submit" value="Done" />
-    </form>
-  {{/if}}
-
-  <h3>Waiting for:</h3>
-  <ul class="players">
-    {{#each players}}
-      {{#unless this.answer }}
-        {{# if this.isCurrent }}
-          <li>You</li>
-        {{ else }}
-          <li>{{ this.name }}</li>
+    {{#unless player.answer}}
+      <p class="player-status">
+        {{#if player.isTurn}}
+          Write an answer for yourself.
+        {{else}}
+          Write an answer that applies to {{ game.turn }}.
         {{/if}}
-      {{/unless}}
-    {{/each}}
-  </ul>
+      </p>
+    {{/unless}}
+  </div><!-- /.instruction-container -->
+
+  <div class="gameplay-container">
+    {{#if player.answer }}
+      <p class="card">{{ game.card }}</p>
+      <p><strong>{{ player.answer }}</strong></p>
+      <a href="#" class="btn-change-answer">Edit</a>
+    {{ else }}
+      <form id="card-form">
+        <p class="card-text">{{ game.card }}</p>
+        <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
+        <input type="submit" value="Submit" />
+      </form>
+    {{/if}}
+  </div><!-- /.gameplay-container -->
+
+  <div class="details-container">
+    <p>Waiting for:</p>
+    <ul class="players">
+      {{#each players}}
+        {{#unless this.answer }}
+          {{# if this.isCurrent }}
+            <li>You</li>
+          {{ else }}
+            <li>{{ this.name }}</li>
+          {{/if}}
+        {{/unless}}
+      {{/each}}
+    </ul>
+  </div><!-- /.details-container -->
 </template>
 
 <template name="reviewView">
+  {{> inGameHeader }}
+
   {{#if player.isTurn}}
-    <h3>Review the answers and select duplicates to be returned.</h3>
-    <form id="review-answers">
-      {{#each players}}
-        <div>
-          {{#if this.isTurn}}
-            <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}">[{{this.name}}] {{this.answer}}</label>
-          {{else}}
-            <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}">[{{this.name}}] {{this.answer}}</label>
-          {{/if}}
-        </div>
-      {{/each}}
-      <input type="submit" value="Continue" />
-    </form>
+    <div class="instruction-container">
+      <p>Review the answers and select any duplicates to be returned.</p>
+    </div><!-- /.instruction-container -->
+
+    <div class="gameplay-container">
+      <form id="review-answers">
+        {{#each players}}
+          <div class="answer-checkboxes">
+            {{#if this.isTurn}}
+              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; you</label>
+            {{else}}
+              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
+            {{/if}}
+          </div>
+        {{/each}}
+        <input type="submit" value="Continue" />
+      </form>
+    </div><!-- /.gameplay-container-->
   {{else}}
-    <h3>Please hold. Answers are under review.</h3>
+    <div class="instruction-container">
+      <p>Please hold. Answers are under review.</p>
+    </div>
   {{/if}}
 </template>
 
 <template name="voteView">
+  {{> inGameHeader }}
+
   {{#if isLoading }}
     <h4><span class="spinner">Loading...</span></h4>
   {{/if}}
 
   {{#if player.isTurn }}
-    <h3>It is your turn. Here are the cards. Read them aloud.</h3>
-    <p><strong>{{ game.card }}</strong></p>
-    <ul>
-      {{#each game.randomPlayers}}
-        <li><strong>{{ this.name }}</strong>: {{ this.answer }}</li>
-      {{/each}}
-    </ul>
+    <p>It is your turn. Here are the cards. Read them aloud.</p>
+
+    <div class="gameplay-container">
+      <p>{{ game.card }}</p>
+      <ul class="player-answers">
+        {{#each game.randomPlayers}}
+          <li><strong>{{ this.name }}</strong>: {{ this.answer }}</li>
+        {{/each}}
+      </ul>
+    </div><!-- /.gameplay-container -->
+
     {{#if game.cardsBeenRead}}
-      <h3>Waiting for votes to be cast by:</h3>
+      <p>Waiting for votes to be cast by:</p>
       <ul>
         {{#each players}}
           {{#unless this.vote}}
@@ -187,42 +208,51 @@
     {{/if}}
   {{else}}
     {{#if game.cardsBeenRead}}
-      <h3>Click the card you think belongs to {{ game.turn }}.</h3>
-      <p>{{ game.card }}</p>
-      <ul>
-        {{#each game.randomPlayers}}
-          <li>
-            {{#if equals this._id player._id}}
-              {{ this.answer }}
-            {{else}}
-              <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
-              {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
-            {{/if}}
-          </li>
-        {{/each}}
-      </ul>
+      <p>Click the card you think belongs to {{ game.turn }}.</p>
+
+      <div class="gameplay-container">
+        <p>{{ game.card }}</p>
+        <ul>
+          {{#each game.randomPlayers}}
+            <li>
+              {{#if equals this._id player._id}}
+                {{ this.answer }}
+              {{else}}
+                <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
+                {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/.gameplay-container -->
     {{else}}
-      <h3>Waiting for cards to be read aloud.</h3>
+      <p>Waiting for cards to be read aloud.</p>
     {{/if}}
   {{/if}}
 </template>
 
 <template name="resultsView">
+  {{> inGameHeader }}
+
   {{#if player.isTurn }}
-    <h1>Round complete.</h1>
-    <p>{{game.card}}</p>
-    {{#each players}}
-      {{#if this.isTurn }}
-        <h2>{{this.name}}: {{this.answer}}</h2>
-      {{/if}}
-    {{/each}}
-    <ul>
-      {{#each players}}
-        {{#unless this.isTurn}}
-          <li>{{ this.name }}: {{this.answer}}</li>
-        {{/unless}}
-      {{/each}}
-    </ul>
+    <p>Round complete.</p>
+
+    <div class="gameplay-container">
+      <p>{{game.card}}</p>
+      <ul>
+        {{#each players}}
+          {{#if this.isTurn }}
+            <li>{{this.name}}: {{this.answer}}</li>
+          {{/if}}
+        {{/each}}
+        {{#each players}}
+          {{#unless this.isTurn}}
+            <li>{{ this.name }}: {{this.answer}}</li>
+          {{/unless}}
+        {{/each}}
+      </ul>
+    </div><!-- /.gameplay-container -->
+
     <ul>
       {{#each players}}
         {{#unless this.isTurn}}
@@ -234,22 +264,29 @@
         {{/unless}}
       {{/each}}
     </ul>
+
     <ul>
       {{#each players}}
         <li>{{ this.name }} &mdash; {{ this.score }}</li>
       {{/each}}
     </ul>
     {{# if winningMessage }}
-      <h1>{{winningMessage}}</h1>
+      <p>{{winningMessage}}</p>
       <a href="#" class="btn-new-game">New game</a>
     {{else}}
       <a href="#" class="btn-next-round">Next</a>
     {{/if}}
   {{else}}
     {{#if winningMessage }}
-      <h1>Game complete! {{winningMessage}}</h1>
+      <p>Game complete! {{winningMessage}}</p>
     {{else}}
-      <h1>Round complete! Waiting for {{ game.turn }} to read the results.</h1>
+      <p>Round complete! Waiting for {{ game.turn }} to read the results.</p>
     {{/if}}
   {{/if}}
+</template>
+
+<template name="inGameHeader">
+  <header>
+    <h5>Truth Be Told</h5>
+  </header>
 </template>
