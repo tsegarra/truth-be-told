@@ -353,7 +353,7 @@ Template.voteView.events({
 
 function getWinningMessage() {
   var game = getCurrentGame();
-  if (!game.winners) return null;
+  if (!game.winners || game.winners.length < 1) return null;
   if (game.winners.length == 1) {
     return game.winners[0].name + ' has won.';
   }

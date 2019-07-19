@@ -1,7 +1,7 @@
 body {
-  padding: 10px;
   font-family: sans-serif;
   text-align:center;
+  margin:0;
 }
 
 a.btn-show-cards,
@@ -41,21 +41,30 @@ ol.lobby-player-list {
 /** Header **/
 header {
   text-align:left;
+  background-color:#c300c3;
+  padding:16px;
 }
 
 header > h5 {
-  margin-top:0;
+  margin:0;
   font-weight:normal;
+  color:#fff;
+  font-size:16px;
 }
 
 /** Game View **/
+.body-container {
+  padding:16px;
+}
+
 .gameplay-container {
   padding:16px;
-  border:1px solid #a7a7a7;
+  border:1px solid #c300c3;
   max-width:400px;
   width:100%;
   display:inline-block;
   box-sizing:border-box;
+  margin-bottom:16px;
 }
 
 .details-container {
@@ -83,4 +92,12 @@ form#review-answers input[type="submit"] {
 
 ul.player-answers {
   text-align:left;
+}
+
+.vote-buttons {
+  text-align:left;
+}
+
+.btn-vote {
+  color: #c300c3;
 }
