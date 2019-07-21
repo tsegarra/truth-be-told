@@ -281,15 +281,25 @@
         {{/unless}}
       {{/each}}
 
-      <table>
-        {{#each players}}
-          <tr>
-            <td>{{ this.name }}</td>
-            <!-- @TODO render these scores more interestingly -->
-            <td>{{ this.score }}</td>
-          </tr>
-        {{/each}}
-      </table>
+      <div class="scores-container">
+        <h3 class="scores-heading">Scores</h3>
+        <table>
+          {{#each scores}}
+            <tr>
+              <td>{{ this.name }}</td>
+              <td>
+                {{#each score in this.scores }}
+                  {{#if score}}
+                    <span class="point has-point">1</span>
+                  {{else}}
+                    <span class="point">0</span>
+                  {{/if}}
+                {{/each}}
+              </td>
+            </tr>
+          {{/each}}
+        </table>
+      </div><!-- /.scores-container -->
     </div><!-- /.details-container -->
 
     {{# if winningMessage }}

@@ -115,3 +115,46 @@ ul.player-answers {
 li.correct-answer {
   color:#02aa02;
 }
+
+/** Scores **/
+.scores-heading {
+  border-bottom: 1px solid #b6b6b6;
+  padding-bottom: 2px;
+  margin-bottom:0;
+  font-weight:normal;
+}
+
+span.point {
+  display: inline-block;
+  font-size: 0;
+  width: 10px;
+  height: 10px;
+  border: 1px solid black;
+  vertical-align: top;
+  border-radius: 50%;
+  margin-top: 3px;
+}
+
+span.point.has-point {
+  background-color: #c300c3;
+}
+
+table > tr > td:last-child {
+  border-bottom: 1px solid #b6b6b6;
+  padding-bottom:8px;
+  padding-top:12px;
+}
+
+table > tr > td:first-child {
+  font-size: 13px;
+  padding-right: 8px;
+}
+
+table > tr:last-child > td {
+  border-bottom: 0;
+}
+
+.scores-container {
+  width:100%;
+  max-width:400px;
+}

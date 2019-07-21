@@ -381,6 +381,20 @@ Template.resultsView.helpers({
   player: getCurrentPlayer,
   players: getAllPlayers,
   winningMessage: getWinningMessage,
+  scores: function() {
+    var players = getAllPlayers();
+    var scores = [], score;
+    players.forEach(function(player) {
+      score = {};
+      score['name'] = player.name;
+      score['scores'] = [];
+      for (var i = 0; i < 20; i++) {
+        score['scores'].push(i < player.score);
+      }
+      scores.push(score);
+    });
+    return scores;
+  },
 });
 
 Template.resultsView.events({
