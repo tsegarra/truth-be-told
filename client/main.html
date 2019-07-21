@@ -1,6 +1,7 @@
 <head>
   <title>Truth Be Told</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
+  <link href="https://fonts.googleapis.com/css?family=Hammersmith+One&display=swap" rel="stylesheet">
 </head>
 
 <body></body>
@@ -169,7 +170,7 @@
           {{#each players}}
             <div class="answer-checkboxes">
               {{#if this.isTurn}}
-                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; you</label>
+                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
               {{else}}
                 <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
               {{/if}}
@@ -261,32 +262,34 @@
       <ul>
         {{#each players}}
           {{#if this.isTurn}}
-            <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
+            <li class="correct-answer"><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
           {{else}}
-            <li><em><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</em></li>
+            <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
           {{/if}}
         {{/each}}
       </ul>
     </div><!-- /.gameplay-container -->
 
     <div class="details-container">
-      <ul class="vote-buttons">
-        {{#each players}}
-          {{#unless this.isTurn}}
-            <li>
-              {{ this.name }} picked {{ this.vote.name }}'s answer.
-              (+1 for {{ this.vote.name }})
-              {{#if this.vote.isTurn}}(+1 for {{this.name}}){{/if}}
-            </li>
-          {{/unless}}
-        {{/each}}
-      </ul>
+      {{#each players}}
+        {{#unless this.isTurn}}
+          <p>
+            {{ this.name }} picked {{ this.vote.name }}'s answer.
+            (+1 for {{ this.vote.name }})
+            {{#if this.vote.isTurn}}(+1 for {{this.name}}){{/if}}
+          </p>
+        {{/unless}}
+      {{/each}}
 
-      <ul>
+      <table>
         {{#each players}}
-          <li>{{ this.name }} &mdash; {{ this.score }}</li>
+          <tr>
+            <td>{{ this.name }}</td>
+            <!-- @TODO render these scores more interestingly -->
+            <td>{{ this.score }}</td>
+          </tr>
         {{/each}}
-      </ul>
+      </table>
     </div><!-- /.details-container -->
 
     {{# if winningMessage }}

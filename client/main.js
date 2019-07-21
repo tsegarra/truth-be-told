@@ -306,6 +306,7 @@ Template.gameView.events({
 Template.reviewView.helpers({
   player: getCurrentPlayer,
   players: getAllPlayers,
+  game: getCurrentGame,
 });
 
 Template.reviewView.events({

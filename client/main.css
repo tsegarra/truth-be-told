@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family:"Hammersmith One", sans-serif;
   text-align:center;
   margin:0;
 }
@@ -73,6 +73,10 @@ footer {
   margin-bottom:16px;
 }
 
+.gameplay-container > ul {
+  text-align:left;
+}
+
 .details-container {
   text-align:left;
   font-size:16px;
@@ -106,4 +110,8 @@ ul.player-answers {
 
 .btn-vote {
   color: #c300c3;
+}
+
+li.correct-answer {
+  color:#02aa02;
 }
