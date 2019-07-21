@@ -101,6 +101,7 @@ function resetUserState() {
 
   Session.set('gameID', null);
   Session.set('playerID', null);
+  Session.set('playerExists', false);
 }
 
 Template.main.helpers({
@@ -184,9 +185,15 @@ Template.joinGame.events({
 
       if (game) {
         Meteor.subscribe('players', game._id, function onReady() {
-          var existingPlayers = Players.find({ gameID: game._id, name: playerName });
-          if (existingPlayers.count()) {
-            alert('Player already exists with that name.');
+          var existingPlayer = Players.findOne({ gameID: game._id, name: playerName });
+          if (existingPlayer) {
+            if (Session.get('playerExists')) {
+              Session.set('gameID', existingPlayer.gameID);
+              Session.set('playerID', existingPlayer._id);
+              Session.set('currentView', 'lobby');
+            } else {
+              Session.set('playerExists', true);
+            }
           } else {
             player = generateNewPlayer(game, playerName);
             Session.set('gameID', game._id);
@@ -210,6 +217,9 @@ Template.joinGame.events({
 Template.joinGame.helpers({
   isLoading: function() {
     return Session.get('loading');
+  },
+  playerExists: function() {
+    return Session.get('playerExists');
   },
 });
 

@@ -49,6 +49,11 @@
   <hr />
 
   <div class="body-container">
+    {{#if playerExists}}
+      <div class="details-container">
+          <p>A player with this name already exists. If you join the game, you'll be logged in as that player.</p>
+      </div>
+    {{/if}}
     <form id="join-game">
       <input autocomplete="off" type="text" id="access-code" name="accessCode" placeholder="Enter an access code" />
       <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
@@ -146,6 +151,8 @@
       </ul>
     </div><!-- /.details-container -->
   </div><!-- /.body-container -->
+
+  <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="reviewView">
@@ -177,6 +184,7 @@
       </div>
     {{/if}}
   </div><!-- /.body-container -->
+  <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="voteView">
@@ -239,6 +247,7 @@
       {{/if}}
     {{/if}}
   </div><!-- /.body-container -->
+  <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="resultsView">
@@ -289,6 +298,7 @@
       {{/if}}
     {{/if}}
   </div><!-- /.body-container -->
+  <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="inGameHeader">
