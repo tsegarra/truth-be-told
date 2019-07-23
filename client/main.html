@@ -197,7 +197,9 @@
     {{/if}}
 
     {{#if player.isTurn }}
-      <p>Read the cards aloud to the group, then click Continue.</p>
+      {{#unless game.cardsBeenRead}}
+        <p>Read the cards aloud to the group, then click Continue.</p>
+      {{/unless}}
 
       <div class="gameplay-container">
         <p>{{ game.card }}</p>
