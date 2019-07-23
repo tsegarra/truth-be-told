@@ -54,8 +54,8 @@ Games.find({'state': 'settingUp'}).observeChanges({
   }
 });
 
-Players.find({'answer': null}).observeChanges({
-  removed: function(id) {
+Players.find({'answer': {$ne: null} }).observeChanges({
+  added: function(id) {
     var currentPlayer = Players.findOne({_id: id});
     var players = Players.find({gameID: currentPlayer.gameID});
 
@@ -74,8 +74,8 @@ Players.find({'answer': null}).observeChanges({
   },
 });
 
-Players.find({'vote': null}).observeChanges({
-  removed: function(id) {
+Players.find({'vote': {$ne: null} }).observeChanges({
+  added: function(id) {
     var currentPlayer = Players.findOne({_id: id});
     var numPlayersWithoutVotes = Players.find({gameID: currentPlayer.gameID, 'vote': null}).count();
     if (numPlayersWithoutVotes <= 1) {
