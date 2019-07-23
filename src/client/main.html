@@ -162,7 +162,7 @@
   <div class="body-container">
     {{#if player.isTurn}}
       <div class="instruction-container">
-        <p>Review the answers and select any duplicates to be returned.</p>
+        <p>Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
       </div><!-- /.instruction-container -->
 
       <div class="gameplay-container">
@@ -181,7 +181,7 @@
       </div><!-- /.gameplay-container-->
     {{else}}
       <div class="instruction-container">
-        <p>Please hold. Answers are under review.</p>
+        <p>Answers are under review.</p>
       </div>
     {{/if}}
   </div><!-- /.body-container -->
@@ -197,7 +197,7 @@
     {{/if}}
 
     {{#if player.isTurn }}
-      <p>Read the cards aloud to the group.</p>
+      <p>Read the cards aloud to the group, then click Continue.</p>
 
       <div class="gameplay-container">
         <p>{{ game.card }}</p>
@@ -221,7 +221,7 @@
             {{/each}}
           </ul>
         {{else}}
-          <a href="#" class="btn-show-cards">The cards have all been read</a>
+          <a href="#" class="btn-show-cards">Continue</a>
         {{/if}}
       </div><!-- /.details-container -->
     {{else}}
