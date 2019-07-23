@@ -135,7 +135,7 @@ Template.createGame.rendered = function() {
 
 Template.createGame.events({
   'submit #create-game': function(event) {
-    var playerName = event.target.playerName.value;
+    var playerName = event.target.playerName.value.trim();
 
     if (!playerName || Session.get('loading')) {
       return false;
@@ -167,7 +167,7 @@ Template.createGame.events({
 Template.joinGame.events({
   'submit #join-game': function (event) {
     var accessCode = event.target.accessCode.value;
-    var playerName = event.target.playerName.value;
+    var playerName = event.target.playerName.value.trim();
 
     if (!playerName || Session.get('loading')) {
       return false;
