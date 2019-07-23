@@ -16,6 +16,7 @@ button {
   color:#6e6e6e;
   cursor:pointer;
   margin-bottom:8px;
+  -webkit-appearance:none;
 }
 
 input[type="text"] {
