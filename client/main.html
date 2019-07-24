@@ -6,6 +6,13 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'UA-125915500-2');
+
+  function captureOutboundLink(url) {
+    gtag('event', 'click', {
+      'event_category': 'Outbound link',
+      'event_label': url,
+    });
+  }
   </script>
   <title>Truth Be Told</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
@@ -29,8 +36,8 @@
   </div>
 
   <footer class="homepage-footer">
-    <p><a href="https://boardgamegeek.com/boardgame/58707/truth-be-told">Truth Be Told</a> is published by <a href="https://buffalogames.com/">Buffalo Games</a>.</p>
-    <p>This unauthorized adaptation is <a href="https://github.com/tsegarra/truth-be-told">hosted on GitHub</a>.</p>
+    <p><a target="_blank" onclick="captureOutboundLink('https://boardgamegeek.com/boardgame/58707/truth-be-told')" href="https://boardgamegeek.com/boardgame/58707/truth-be-told">Truth Be Told</a> is published by <a onclick="captureOutboundLink('https://buffalogames.com/')" target="_blank" href="https://buffalogames.com/">Buffalo Games</a>.</p>
+    <p>This unauthorized adaptation is <a target="_blank" onclick="captureOutboundLink('https://github.com/tsegarra/truth-be-told')" href="https://github.com/tsegarra/truth-be-told">hosted on GitHub</a>.</p>
   </footer>
 </template>
 

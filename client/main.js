@@ -38,6 +38,11 @@ function generateNewGame() {
   var gameID = Games.insert(game);
   game = Games.findOne(gameID);
 
+  gtag('event', 'create', {
+    'event_category': 'Game',
+    'event_label': game.accessCode,
+  });
+
   return game;
 }
 
@@ -52,6 +57,11 @@ function generateNewPlayer(game, name) {
   };
 
   var playerID = Players.insert(player);
+  
+  gtag('event', 'create', {
+    'event_category': 'Player',
+    'event_label': name + ' (' + game.accessCode + ')',
+  });
 
   return Players.findOne(playerID);
 }
