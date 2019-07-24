@@ -59,6 +59,15 @@ footer {
   padding:16px;
 }
 
+footer.homepage-footer {
+  text-align:center;
+}
+
+footer.homepage-footer a,
+footer.homepage-footer a:visited {
+  color: #c300c3;
+}
+
 /** Game View **/
 .body-container {
   padding:16px;
