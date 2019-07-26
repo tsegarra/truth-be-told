@@ -5,7 +5,7 @@
   window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'UA-125915500-2');
+    //gtag('config', 'UA-125915500-2');
 
   function captureOutboundLink(url) {
     gtag('event', 'click', {
@@ -296,11 +296,13 @@
     <div class="details-container">
       {{#each players}}
         {{#unless this.isTurn}}
-          <p>
-            {{ this.name }} picked {{ this.vote.name }}'s answer.
-            (+1 for {{ this.vote.name }})
-            {{#if this.vote.isTurn}}(+1 for {{this.name}}){{/if}}
-          </p>
+          <div class="answer-line">
+            <p>{{ this.name }} picked {{ this.vote.name }}'s answer.</p>
+            <ul>
+              <li>(+1 for {{ this.vote.name }})</li>
+              {{#if this.vote.isTurn}}<li>(+1 for {{this.name}})</li>{{/if}}
+            </ul>
+          </div>
         {{/unless}}
       {{/each}}
 
