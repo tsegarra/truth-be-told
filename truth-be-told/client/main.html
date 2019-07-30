@@ -3,9 +3,12 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125915500-2"></script>
   <script>
   window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    //gtag('config', 'UA-125915500-2');
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'UA-125915500-2');
+  if (window.location.hostname == 'tbt.test') {
+    window['ga-disable-UA-125915500-2'] = true;
+  }
 
   function captureOutboundLink(url) {
     gtag('event', 'click', {
