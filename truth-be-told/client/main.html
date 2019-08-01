@@ -20,7 +20,7 @@
   <title>Truth Be Told</title>
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <meta name="description" content="Truth Be Told is a party game where players answer a series of questions while pretending to be each other." />
-  <link href="https://fonts.googleapis.com/css?family=Hammersmith+One&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -34,17 +34,18 @@
 <body></body>
 
 <template name="main">
-  <div class="main-content">
+  {{> inGameHeader }}
+
+  <div class="main-content gutter">
     {{> Template.dynamic template=whichView}}
   </div>
 </template>
 
 <template name="startMenu">
-  <h4>Truth Be Told</h4>
-
-  <div class="button-container">
-    <button id="btn-new-game">New Game</button>
-    <button id="btn-join-game">Join Game</button>
+  <div class="button-container center">
+    <p>Truth Be Told is a party game where players answer a series of questions while pretending to be each other.</p>
+    <button class="btn-contained" id="btn-new-game">New Game</button>
+    <button class="btn-contained" id="btn-join-game">Join Game</button>
   </div>
 
   <footer class="homepage-footer">
@@ -54,62 +55,48 @@
 </template>
 
 <template name="createGame">
-  <h4>
-    {{#if isLoading }}
-      <span class="spinner">Loading...</span>
-    {{else}}
-      Truth Be Told
-    {{/if}}
-  </h4>
+  {{#if isLoading }}
+    <h4><span class="spinner">Loading...</span></h4>
+  {{/if}}
 
-  <form id="create-game">
+  <form class="center" id="create-game">
     <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
     <div class="button-container">
-      <input type="submit" value="Create game" />
-      <button class="btn-back">Back</button>
+      <input class="btn-contained" type="submit" value="Create game" />
+      <button class="btn-back btn-outlined">Back</button>
     </div>
   </form>
 </template>
 
 <template name="joinGame">
-  <h4>
-    {{#if isLoading }}
-      <span class="spinner">Loading...</span>
-    {{else}}
-      Truth Be Told
-    {{/if}}
-  </h4>
-  <hr />
+  {{#if isLoading }}
+    <h4><span class="spinner">Loading...</span></h4>
+  {{/if}}
 
-  <div class="body-container">
-    {{#if playerExists}}
-      <div class="details-container">
-          <p>A player with this name already exists. If you join the game, you'll be logged in as that player.</p>
-      </div>
-    {{/if}}
-    <form id="join-game">
-      <input autocomplete="off" type="text" id="access-code" name="accessCode" placeholder="Enter an access code" />
-      <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
+  {{#if playerExists}}
+    <div class="details-container">
+        <p>A player with this name already exists. If you join the game, you'll be logged in as that player.</p>
+    </div>
+  {{/if}}
+  <form id="join-game" class="center">
+    <input autocomplete="off" type="text" id="access-code" name="accessCode" placeholder="Enter an access code" />
+    <input type="text" id="player-name" name="playerName" autocomplete="off" placeholder="Enter your name" />
 
-      <div class="button-container">
-        <input type="submit" value="Join" />
-        <button class="btn-back">Back</button>
-      </div>
-    </form>
-  </div>
+    <div class="button-container">
+      <input class="btn-contained" type="submit" value="Join" />
+      <button class="btn-back btn-outlined">Back</button>
+    </div>
+  </form>
 </template>
 
 <template name="lobby">
-  <h4>
-    {{#if isLoading }}
-      <span class="spinner">Loading...</span>
-    {{else}}
-      Truth Be Told
-    {{/if}}
-  </h4>
+  {{#if isLoading }}
+    <h4><span class="spinner">Loading...</span></h4>
+  {{/if}}
 
-  <div class="access-code">
-    Access code: <span>{{ game.accessCode }}</span>
+  <div class="access-code-container">
+    <label class="access-code-label">Access code</label>
+    <span class="access-code">{{ game.accessCode }}</span>
   </div>
 
   <ol class="lobby-player-list">
@@ -131,227 +118,214 @@
   </ol>
 
   <div class="button-container">
-    <button class="btn-start">Start game</button>
-    <button class="btn-leave">Leave game</button>
+    <button class="btn-contained btn-start">Start game</button>
+    <button class="btn-outlined btn-leave">Leave game</button>
   </div>
 </template>
 
 <template name="gameView">
-  {{> inGameHeader }}
+  <div class="instruction-container">
+    {{#if player.duplicate }}
+      <p class="duplicate-message">Your answer is a duplicate and was returned to you by {{ game.turn }}.</p>
+    {{/if}}
 
-  <div class="body-container">
-    <div class="instruction-container">
-      {{#if player.duplicate }}
-        <p class="duplicate-message">Your answer is a duplicate and was returned to you by {{ game.turn }}.</p>
-      {{/if}}
+    {{#unless player.answer}}
+      <p class="player-status">
+        {{#if player.isTurn}}
+          Write an answer for yourself.
+        {{else}}
+          Write an answer that applies to {{ game.turn }}.
+        {{/if}}
+      </p>
+    {{/unless}}
+  </div><!-- /.instruction-container -->
 
-      {{#unless player.answer}}
-        <p class="player-status">
-          {{#if player.isTurn}}
-            Write an answer for yourself.
-          {{else}}
-            Write an answer that applies to {{ game.turn }}.
+  <div class="gameplay-container">
+    {{#if player.answer }}
+      <p class="card">{{ game.card }}</p>
+      <p><strong>{{ player.answer }}</strong> <a href="#" class="btn-change-answer">Edit</a></p>
+    {{ else }}
+      <form id="card-form">
+        <p class="card-text">{{ game.card }}</p>
+        <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
+        <input class="btn-contained" type="submit" value="Submit" />
+      </form>
+    {{/if}}
+  </div><!-- /.gameplay-container -->
+
+  <div class="details-container">
+    <p>Waiting for:</p>
+    <ul class="players">
+      {{#each players}}
+        {{#unless this.answer }}
+          {{# if this.isCurrent }}
+            <li>You</li>
+          {{ else }}
+            <li>{{ this.name }}</li>
           {{/if}}
-        </p>
-      {{/unless}}
-    </div><!-- /.instruction-container -->
-
-    <div class="gameplay-container">
-      {{#if player.answer }}
-        <p class="card">{{ game.card }}</p>
-        <p><strong>{{ player.answer }}</strong> <a href="#" class="btn-change-answer">Edit</a></p>
-      {{ else }}
-        <form id="card-form">
-          <p class="card-text">{{ game.card }}</p>
-          <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
-          <input type="submit" value="Submit" />
-        </form>
-      {{/if}}
-    </div><!-- /.gameplay-container -->
-
-    <div class="details-container">
-      <p>Waiting for:</p>
-      <ul class="players">
-        {{#each players}}
-          {{#unless this.answer }}
-            {{# if this.isCurrent }}
-              <li>You</li>
-            {{ else }}
-              <li>{{ this.name }}</li>
-            {{/if}}
-          {{/unless}}
-        {{/each}}
-      </ul>
-    </div><!-- /.details-container -->
-  </div><!-- /.body-container -->
+        {{/unless}}
+      {{/each}}
+    </ul>
+  </div><!-- /.details-container -->
 
   <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="reviewView">
-  {{> inGameHeader }}
+  {{#if player.isTurn}}
+    <div class="instruction-container">
+      <p>Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
+    </div><!-- /.instruction-container -->
 
-  <div class="body-container">
-    {{#if player.isTurn}}
-      <div class="instruction-container">
-        <p>Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
-      </div><!-- /.instruction-container -->
-
-      <div class="gameplay-container">
-        <form id="review-answers">
-          {{#each players}}
-            <div class="answer-checkboxes">
-              {{#if this.isTurn}}
-                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
-              {{else}}
-                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
-              {{/if}}
-            </div>
-          {{/each}}
-          <input type="submit" value="Continue" />
-        </form>
-      </div><!-- /.gameplay-container-->
-    {{else}}
-      <div class="instruction-container">
-        <p>Answers are under review.</p>
-      </div>
-    {{/if}}
-  </div><!-- /.body-container -->
+    <div class="gameplay-container">
+      <form id="review-answers">
+        {{#each players}}
+          <div class="answer-checkboxes">
+            {{#if this.isTurn}}
+              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
+            {{else}}
+              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
+            {{/if}}
+          </div>
+        {{/each}}
+        <input class="btn-contained" type="submit" value="Continue" />
+      </form>
+    </div><!-- /.gameplay-container-->
+  {{else}}
+    <div class="instruction-container">
+      <p>Answers are under review.</p>
+    </div>
+  {{/if}}
   <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="voteView">
-  {{> inGameHeader }}
+  {{#if isLoading }}
+    <h4><span class="spinner">Loading...</span></h4>
+  {{/if}}
 
-  <div class="body-container">
-    {{#if isLoading }}
-      <h4><span class="spinner">Loading...</span></h4>
-    {{/if}}
-
-    {{#if player.isTurn }}
-      {{#unless game.cardsBeenRead}}
-        <p>Read the cards aloud to the group, then click Continue.</p>
-      {{/unless}}
-
-      <div class="gameplay-container">
-        <p>{{ game.card }}</p>
-        <ul class="player-answers">
-          {{#each game.randomPlayers}}
-            <li><strong>{{ this.answer }}</strong> &mdash; {{ this.name }}</li>
-          {{/each}}
-        </ul>
-      </div><!-- /.gameplay-container -->
-
-      <div class="details-container">
-        {{#if game.cardsBeenRead}}
-          <p>Waiting for votes to be cast by:</p>
-          <ul>
-            {{#each players}}
-              {{#unless this.vote}}
-                {{#unless this.isTurn}}
-                  <li>{{ this.name }}</li>
-                {{/unless}}
-              {{/unless}}
-            {{/each}}
-          </ul>
-        {{else}}
-          <a href="#" class="btn-show-cards">Continue</a>
-        {{/if}}
-      </div><!-- /.details-container -->
-    {{else}}
-      {{#if game.cardsBeenRead}}
-        <p>Click the card you think belongs to {{ game.turn }}.</p>
-
-        <div class="gameplay-container">
-          <p>{{ game.card }}</p>
-          <ul class="vote-buttons">
-            {{#each game.randomPlayers}}
-              <li>
-                {{#if equals this._id player._id}}
-                  {{ this.answer }}
-                {{else}}
-                  <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
-                  {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
-                {{/if}}
-              </li>
-            {{/each}}
-          </ul>
-        </div><!--/.gameplay-container -->
-      {{else}}
-        <p>Waiting for cards to be read aloud.</p>
-      {{/if}}
-    {{/if}}
-  </div><!-- /.body-container -->
-  <footer>Access code: {{ game.accessCode }}</footer>
-</template>
-
-<template name="resultsView">
-  {{> inGameHeader }}
-
-  <div class="body-container">
-    <p>Round complete.</p>
+  {{#if player.isTurn }}
+    {{#unless game.cardsBeenRead}}
+      <p>Read the cards aloud to the group, then click Continue.</p>
+    {{/unless}}
 
     <div class="gameplay-container">
-      <p>{{game.card}}</p>
-      <ul>
-        {{#each players}}
-          {{#if this.isTurn}}
-            <li class="correct-answer"><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
-          {{else}}
-            <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
-          {{/if}}
+      <p>{{ game.card }}</p>
+      <ul class="player-answers">
+        {{#each game.randomPlayers}}
+          <li><strong>{{ this.answer }}</strong> &mdash; {{ this.name }}</li>
         {{/each}}
       </ul>
     </div><!-- /.gameplay-container -->
 
     <div class="details-container">
-      {{#each players}}
-        {{#unless this.isTurn}}
-          <div class="answer-line">
-            <p>{{ this.name }} picked {{ this.vote.name }}'s answer.</p>
-            <ul>
-              <li>(+1 for {{ this.vote.name }})</li>
-              {{#if this.vote.isTurn}}<li>(+1 for {{this.name}})</li>{{/if}}
-            </ul>
-          </div>
-        {{/unless}}
-      {{/each}}
-
-      <div class="scores-container">
-        <h3 class="scores-heading">Scores</h3>
-        <table>
-          {{#each scores}}
-            <tr>
-              <td>{{ this.name }}</td>
-              <td>
-                {{#each score in this.scores }}
-                  {{#if score}}
-                    <span class="point has-point">1</span>
-                  {{else}}
-                    <span class="point">0</span>
-                  {{/if}}
-                {{/each}}
-              </td>
-            </tr>
+      {{#if game.cardsBeenRead}}
+        <p>Waiting for votes to be cast by:</p>
+        <ul>
+          {{#each players}}
+            {{#unless this.vote}}
+              {{#unless this.isTurn}}
+                <li>{{ this.name }}</li>
+              {{/unless}}
+            {{/unless}}
           {{/each}}
-        </table>
-      </div><!-- /.scores-container -->
-    </div><!-- /.details-container -->
-
-    {{# if winningMessage }}
-      <p>{{winningMessage}}</p>
-      <a href="#" class="btn-new-game">New game</a>
-    {{else}}
-      {{# if player.isTurn }}
-        <a href="#" class="btn-next-round">Next</a>
+        </ul>
+      {{else}}
+        <a href="#" class="btn-show-cards btn-contained">Continue</a>
       {{/if}}
+    </div><!-- /.details-container -->
+  {{else}}
+    {{#if game.cardsBeenRead}}
+      <p>Click the card you think belongs to {{ game.turn }}.</p>
+
+      <div class="gameplay-container">
+        <p>{{ game.card }}</p>
+        <ul class="vote-buttons">
+          {{#each game.randomPlayers}}
+            <li>
+              {{#if equals this._id player._id}}
+                {{ this.answer }}
+              {{else}}
+                <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
+                {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+              {{/if}}
+            </li>
+          {{/each}}
+        </ul>
+      </div><!--/.gameplay-container -->
+    {{else}}
+      <p>Waiting for cards to be read aloud.</p>
     {{/if}}
-  </div><!-- /.body-container -->
+  {{/if}}
+  <footer>Access code: {{ game.accessCode }}</footer>
+</template>
+
+<template name="resultsView">
+  <p>Round complete.</p>
+
+  <div class="gameplay-container">
+    <p>{{game.card}}</p>
+    <ul>
+      {{#each players}}
+        {{#if this.isTurn}}
+          <li class="correct-answer"><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
+        {{else}}
+          <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
+        {{/if}}
+      {{/each}}
+    </ul>
+  </div><!-- /.gameplay-container -->
+
+  <div class="details-container">
+    {{#each players}}
+      {{#unless this.isTurn}}
+        <div class="answer-line">
+          <p>{{ this.name }} picked {{ this.vote.name }}'s answer.</p>
+          <ul>
+            <li>(+1 for {{ this.vote.name }})</li>
+            {{#if this.vote.isTurn}}<li>(+1 for {{this.name}})</li>{{/if}}
+          </ul>
+        </div>
+      {{/unless}}
+    {{/each}}
+
+    <div class="scores-container">
+      <h3 class="scores-heading">Scores</h3>
+      <table>
+        {{#each scores}}
+          <tr>
+            <td>{{ this.name }}</td>
+            <td>
+              {{#each score in this.scores }}
+                {{#if score}}
+                  <span class="point has-point">1</span>
+                {{else}}
+                  <span class="point">0</span>
+                {{/if}}
+              {{/each}}
+            </td>
+          </tr>
+        {{/each}}
+      </table>
+    </div><!-- /.scores-container -->
+  </div><!-- /.details-container -->
+
+  {{# if winningMessage }}
+    <p>{{winningMessage}}</p>
+    <a href="#" class="btn-contained btn-new-game">New game</a>
+  {{else}}
+    {{# if player.isTurn }}
+      <a href="#" class="btn-contained btn-next-round">Next</a>
+    {{/if}}
+  {{/if}}
+
   <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="inGameHeader">
   <header>
-    <h5>Truth Be Told</h5>
+    <div class="gutter">
+      <h5>Truth Be Told</h5>
+    </div>
   </header>
 </template>
