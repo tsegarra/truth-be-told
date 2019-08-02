@@ -21,6 +21,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no" />
   <meta name="description" content="Truth Be Told is a party game where players answer a series of questions while pretending to be each other." />
   <link href="https://fonts.googleapis.com/css?family=Roboto:400,500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -43,7 +44,7 @@
 
 <template name="startMenu">
   <div class="button-container center">
-    <p>Truth Be Told is a party game where players answer a series of questions while pretending to be each other.</p>
+    <p class="intro-text">Truth Be Told is a party game where players answer a series of questions while pretending to be each other.</p>
     <button class="btn-contained" id="btn-new-game">New Game</button>
     <button class="btn-contained" id="btn-join-game">Join Game</button>
   </div>
@@ -100,17 +101,19 @@
   </div>
 
   <ol class="lobby-player-list">
+    <li class="header-row">
+      <span class="name">Players</span>
+    </li>
     {{#each players}}
       <li>
-        {{ name }}
-
+        <span class="name">{{ name }}</span>
         {{#if isCurrent }}
           <a href="#" class="btn-edit-player" data-player-id="{{_id}}">
-            <i class="fa fa-pencil">Edit</i>
+            <i class="material-icons md-18 orange">settings</i>
           </a>
         {{else}}
           <a href="#" class="btn-remove-player" data-player-id="{{_id}}">
-            <i class="fa fa-close">&times;</i>
+            <i class="material-icons md-18 orange">delete</i>
           </a>
         {{/if}}
       </li>
@@ -143,7 +146,7 @@
   <div class="gameplay-container">
     {{#if player.answer }}
       <p class="card">{{ game.card }}</p>
-      <p><strong>{{ player.answer }}</strong> <a href="#" class="btn-change-answer">Edit</a></p>
+      <p><strong>{{ player.answer }}</strong> <a href="#" class="btn-change-answer"><i class="material-icons md-18 orange">edit</i></a></p>
     {{ else }}
       <form id="card-form">
         <p class="card-text">{{ game.card }}</p>
@@ -247,7 +250,7 @@
                 {{ this.answer }}
               {{else}}
                 <a href="#" class="btn-vote" data-id="{{this._id}}">{{ this.answer }}</a>
-                {{#if equals this._id player.vote._id }}<strong>voted</strong>{{/if}}
+                {{#if equals this._id player.vote._id }}<i class="material-icons md-18 green">check_circle</i>{{/if}}
               {{/if}}
             </li>
           {{/each}}

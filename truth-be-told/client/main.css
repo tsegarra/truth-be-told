@@ -27,6 +27,12 @@ strong {
   -webkit-appearance:none;
 }
 
+.btn-inline {
+  background-color:#ff7600;
+  border:1px solid #ff7600;
+  padding:4px 8px;
+}
+
 .gutter {
   padding:16px;
   max-width:1050px;
@@ -59,22 +65,62 @@ h4 {
   font-size:32px;
 }
 
+.button-container {
+  text-align:center;
+}
+
+.material-icons.purple { color:#c300c3; }
+.material-icons.orange { color:#ff7600; }
+.material-icons.white { color:#fff; }
+.material-icons.green { color:#02aa02;}
+.material-icons.md-18 { font-size:18px; }
+
+/** Homepage **/
+.intro-text {
+  font-size:20px;
+  margin:56px 0;
+  padding: 0 16px;
+}
+
 /** Lobby **/
 
 ol.lobby-player-list {
-  max-width:130px;
   width:100%;
-  padding:16px 0 16px 32px;
+  padding:16px 0;
+  list-style:none;
   display:inline-block;
   text-align:left;
 }
 
 .lobby-player-list > li {
   margin-bottom:16px;
+  padding:16px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  position:relative;
 }
 
 .lobby-player-list > li:last-child {
   margin-bottom:0;
+}
+
+.lobby-player-list > li > a {
+  font-size:0;
+  position:absolute;
+  right:0;
+  top:0;
+  padding:16px;
+}
+
+.lobby-player-list .name {
+  vertical-align:top;
+}
+
+.lobby-player-list .header-row {
+  font-weight:500;
+  font-size:19px;
+  border:none;
+  padding:0 16px;
 }
 
 .access-code-container {
@@ -155,6 +201,10 @@ footer.homepage-footer a:visited {
 .answer-checkboxes {
   text-align:left;
   margin-bottom:8px;
+}
+
+.instruction-container {
+  text-align:center;
 }
 
 form#review-answers input[type="submit"] {
