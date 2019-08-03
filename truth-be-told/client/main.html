@@ -44,7 +44,7 @@
 
 <template name="startMenu">
   <div class="button-container center">
-    <p class="intro-text">Truth Be Told is a party game where players answer a series of questions while pretending to be each other.</p>
+    <p class="intro-text">Win points by impersonating your friends while answering a series of questions.</p>
     <button class="btn-contained" id="btn-new-game">New Game</button>
     <button class="btn-contained" id="btn-join-game">Join Game</button>
   </div>
@@ -134,11 +134,8 @@
 
     {{#unless player.answer}}
       <p class="player-status">
-        {{#if player.isTurn}}
-          Write an answer for yourself.
-        {{else}}
-          Write an answer that applies to {{ game.turn }}.
-        {{/if}}
+        Write an answer that applies to
+          {{#if player.isTurn}}yourself{{else}}{{ game.turn }}{{/if}}
       </p>
     {{/unless}}
   </div><!-- /.instruction-container -->
@@ -146,7 +143,7 @@
   <div class="gameplay-container">
     {{#if player.answer }}
       <p class="card">{{ game.card }}</p>
-      <p><strong>{{ player.answer }}</strong> <a href="#" class="btn-change-answer"><i class="material-icons md-18 orange">edit</i></a></p>
+      <p><strong class="submitted-answer">{{ player.answer }}</strong> <a href="#" class="btn-change-answer"><i class="material-icons md-18 orange">edit</i></a></p>
     {{ else }}
       <form id="card-form">
         <p class="card-text">{{ game.card }}</p>
