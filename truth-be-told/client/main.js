@@ -280,7 +280,6 @@ Template.lobby.events({
 });
 
 Template.gameView.rendered = function() {
-  $('#answer').focus();
 };
 
 Template.gameView.helpers({

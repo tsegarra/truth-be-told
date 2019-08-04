@@ -142,14 +142,50 @@
 
   <div class="gameplay-container">
     {{#if player.answer }}
-      <p class="card">{{ game.card }}</p>
-      <p><strong class="submitted-answer">{{ player.answer }}</strong> <a href="#" class="btn-change-answer"><i class="material-icons md-18 orange">edit</i></a></p>
+      <p class="card"><span class="card-text">{{ game.card }}</span><a href="#" class="btn-change-answer"><i class="material-icons md-24 orange">edit</i></a></p>
+      <span class="submitted-answer">{{ player.answer }}</span>
+      <script>
+        var cardText = $('.card-text').text();
+        var indexOfBlank = cardText.indexOf('___');
+        $('.card-text').text('');
+        $('<span>').text(cardText.substring(0, indexOfBlank)).appendTo('.card-text');
+        $('.submitted-answer').appendTo('.card-text');
+        $('<span>').text(cardText.substring(indexOfBlank + 3)).appendTo('.card-text');
+      </script>
     {{ else }}
       <form id="card-form">
         <p class="card-text">{{ game.card }}</p>
         <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
-        <input class="btn-contained" type="submit" value="Submit" />
+        <input class="btn-contained card-submit" type="submit" value="Submit" />
       </form>
+      <script>
+        var showHideSubmit = function() {
+          var text = $('#answer').val();
+          if (text) {
+            $('.card-submit').show();
+            $('.card-blank').text(text);
+          } else {
+            $('.card-submit').hide();
+            $('.card-blank').text('___');
+          }
+        };
+
+        showHideSubmit();
+
+        var cardText = $('.card-text').text();
+        var indexOfBlank = cardText.indexOf('___');
+        $('.card-text').text('');
+        $('<span>').text(cardText.substring(0, indexOfBlank)).appendTo('.card-text');
+        var currentAnswer = $('#answer').val();
+        var blankText = currentAnswer ? currentAnswer : '___';
+        $('<span>').addClass('card-blank').text(blankText).appendTo('.card-text');
+        $('<span>').text(cardText.substring(indexOfBlank + 3)).appendTo('.card-text');
+        $('#answer').focus();
+
+        $('#answer').keyup(function() {
+          showHideSubmit();
+        });
+      </script>
     {{/if}}
   </div><!-- /.gameplay-container -->
 
@@ -280,10 +316,10 @@
     {{#each players}}
       {{#unless this.isTurn}}
         <div class="answer-line">
-          <p>{{ this.name }} picked {{ this.vote.name }}'s answer.</p>
+          <p>{{ this.name }} picked {{ this.vote.name }}'s answer</p>
           <ul>
-            <li>(+1 for {{ this.vote.name }})</li>
-            {{#if this.vote.isTurn}}<li>(+1 for {{this.name}})</li>{{/if}}
+            <li>+1 for {{ this.vote.name }}</li>
+            {{#if this.vote.isTurn}}<li>+1 for {{this.name}}</li>{{/if}}
           </ul>
         </div>
       {{/unless}}

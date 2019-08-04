@@ -54,10 +54,17 @@ strong {
   color:#c300c3;
 }
 
+.card-text {
+  font-size:24px;
+}
+
 input[type="text"] {
-  padding:16px;
-  border:1px solid #ccc;
   margin-bottom:8px;
+  padding:16px;
+}
+
+#card-form input#answer:focus {
+  outline:none;
 }
 
 h4 {
@@ -74,6 +81,7 @@ h4 {
 .material-icons.white { color:#fff; }
 .material-icons.green { color:#02aa02;}
 .material-icons.md-18 { font-size:18px; }
+.material-icons.md-24 { font-size:24px; }
 
 /** Homepage **/
 .intro-text {
@@ -171,7 +179,6 @@ footer.homepage-footer a:visited {
 
 /** Game View **/
 .gameplay-container {
-  padding:16px;
   border-radius:4px;
   text-align:center;
   width:100%;
@@ -182,6 +189,10 @@ footer.homepage-footer a:visited {
 
 #card-form {
   display:inline-block;
+}
+
+.card-submit {
+  display:none;
 }
 
 .gameplay-container > ul {
@@ -223,6 +234,10 @@ ul.player-answers {
   text-align:left;
 }
 
+.vote-buttons .material-icons {
+  vertical-align:top;
+}
+
 .btn-vote {
   color: #c300c3;
 }
@@ -253,9 +268,22 @@ p.player-status {
 .btn-change-answer {
   display:inline-block;
   margin-top:1px;
+  margin-left:8px;
 }
 
 /** Scores **/
+.answer-line p {
+  margin-bottom: 0;
+}
+
+.answer-line ul {
+  margin-top: 8px;
+}
+
+.answer-line:first-child p {
+  margin-top: 0;
+}
+
 .scores-heading {
   border-bottom: 1px solid #b6b6b6;
   padding-bottom: 2px;
