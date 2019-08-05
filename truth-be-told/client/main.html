@@ -190,16 +190,19 @@
   </div><!-- /.gameplay-container -->
 
   <div class="details-container">
-    <p>Waiting for:</p>
+    <p>Players</p>
     <ul class="players">
       {{#each players}}
-        {{#unless this.answer }}
+        <li>
           {{# if this.isCurrent }}
-            <li>You</li>
+            You
           {{ else }}
-            <li>{{ this.name }}</li>
+            {{ this.name }}
           {{/if}}
-        {{/unless}}
+          {{#if this.answer }}
+            <i class="material-icons md-18 green">check_circle</i>
+          {{/if}}
+        </li>
       {{/each}}
     </ul>
   </div><!-- /.details-container -->
@@ -230,6 +233,7 @@
   {{else}}
     <div class="instruction-container">
       <p>Answers are under review.</p>
+      <div class="spinner"></div>
     </div>
   {{/if}}
   <footer>Access code: {{ game.accessCode }}</footer>
