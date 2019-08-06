@@ -57,7 +57,7 @@
 
 <template name="createGame">
   {{#if isLoading }}
-    <h4><span class="spinner">Loading...</span></h4>
+    <h4><span>Loading...</span></h4>
   {{/if}}
 
   <form class="center" id="create-game">
@@ -71,7 +71,7 @@
 
 <template name="joinGame">
   {{#if isLoading }}
-    <h4><span class="spinner">Loading...</span></h4>
+    <h4><span>Loading...</span></h4>
   {{/if}}
 
   {{#if playerExists}}
@@ -92,7 +92,7 @@
 
 <template name="lobby">
   {{#if isLoading }}
-    <h4><span class="spinner">Loading...</span></h4>
+    <h4><span>Loading...</span></h4>
   {{/if}}
 
   <div class="access-code-container">
@@ -213,17 +213,30 @@
 <template name="reviewView">
   {{#if player.isTurn}}
     <div class="instruction-container">
-      <p>Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
+      <p class="player-status">Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
     </div><!-- /.instruction-container -->
 
     <div class="gameplay-container">
       <form id="review-answers">
         {{#each players}}
           <div class="answer-checkboxes">
+            <div class="checkbox-container">
+              {{#if this.isTurn}}
+                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" />
+              {{else}}
+                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" />
+              {{/if}}
+              <div class="checkbox-background">
+                <svg class="checkbox-checkmark" viewBox="0 0 24 24">
+                  <path class="checkbox-checkmark-path" fill="none" stroke="#fff"
+                    d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                </svg>
+              </div>
+            </div>
             {{#if this.isTurn}}
-              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" /><label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
+              <label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
             {{else}}
-              <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" /><label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
+              <label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
             {{/if}}
           </div>
         {{/each}}
@@ -232,7 +245,7 @@
     </div><!-- /.gameplay-container-->
   {{else}}
     <div class="instruction-container">
-      <p>Answers are under review.</p>
+      <p class="player-status">Answers are under review by {{ game.turn }}.</p>
       <div class="spinner"></div>
     </div>
   {{/if}}
@@ -241,7 +254,7 @@
 
 <template name="voteView">
   {{#if isLoading }}
-    <h4><span class="spinner">Loading...</span></h4>
+    <h4><span>Loading...</span></h4>
   {{/if}}
 
   {{#if player.isTurn }}
