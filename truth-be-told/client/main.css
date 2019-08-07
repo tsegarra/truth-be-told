@@ -329,15 +329,21 @@ p.player-status {
 
 .checkbox-container > input {
   position:absolute;
-  width:100%;
-  height:100%;
+  width:24px;
+  height:24px;
   top:0;
   left:0;
   opacity:0;
+  z-index:1;
+  margin:0;
 }
 
 .checkbox-container > input:checked + .checkbox-background {
   background-color: #0094fd;
+}
+
+.checkbox-container > input:disabled + .checkbox-background {
+  display: none;
 }
 
 .checkbox-checkmark-path {

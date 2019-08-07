@@ -213,8 +213,10 @@
 <template name="reviewView">
   {{#if player.isTurn}}
     <div class="instruction-container">
-      <p class="player-status">Review the answers below. If there are any duplicates, select all but one to be revised before continuing.</p>
+      <p class="player-status">Review the answers below. If there are any duplicates, select all but one to be revised before continuing. If there are no duplicates, click Continue.</p>
     </div><!-- /.instruction-container -->
+
+    <p class="card-text">{{ game.card }}</p>
 
     <div class="gameplay-container">
       <form id="review-answers">
@@ -234,9 +236,9 @@
               </div>
             </div>
             {{#if this.isTurn}}
-              <label for="{{this._id}}"><strong>{{this.answer}}</strong></label>
+              <label for="answer-{{this._id}}"><strong>{{this.answer}}</strong></label>
             {{else}}
-              <label for="{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
+              <label for="answer-{{this._id}}"><strong>{{this.answer}}</strong> &mdash; {{this.name}}</label>
             {{/if}}
           </div>
         {{/each}}
@@ -259,7 +261,9 @@
 
   {{#if player.isTurn }}
     {{#unless game.cardsBeenRead}}
-      <p>Read the cards aloud to the group, then click Continue.</p>
+      <div class="instruction-container">
+        <p class="player-status">Read the cards aloud to the group, then click Continue.</p>
+      </div>
     {{/unless}}
 
     <div class="gameplay-container">
@@ -307,15 +311,16 @@
         </ul>
       </div><!--/.gameplay-container -->
     {{else}}
-      <p>Waiting for cards to be read aloud.</p>
+      <div class="instruction-container">
+        <p class="player-status">Waiting for cards to be read aloud.</p>
+        <div class="spinner"></div>
+      </div>
     {{/if}}
   {{/if}}
   <footer>Access code: {{ game.accessCode }}</footer>
 </template>
 
 <template name="resultsView">
-  <p>Round complete.</p>
-
   <div class="gameplay-container">
     <p>{{game.card}}</p>
     <ul>
@@ -363,14 +368,16 @@
     </div><!-- /.scores-container -->
   </div><!-- /.details-container -->
 
-  {{# if winningMessage }}
-    <p>{{winningMessage}}</p>
-    <a href="#" class="btn-contained btn-new-game">New game</a>
-  {{else}}
-    {{# if player.isTurn }}
-      <a href="#" class="btn-contained btn-next-round">Next</a>
+  <div class="button-container center">
+    {{# if winningMessage }}
+      <p>{{winningMessage}}</p>
+      <a href="#" class="btn-contained btn-new-game">New game</a>
+    {{else}}
+      {{# if player.isTurn }}
+        <a href="#" class="btn-contained btn-next-round">Next</a>
+      {{/if}}
     {{/if}}
-  {{/if}}
+  </div>
 
   <footer>Access code: {{ game.accessCode }}</footer>
 </template>
