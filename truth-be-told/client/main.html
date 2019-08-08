@@ -270,7 +270,7 @@
       <p>{{ game.card }}</p>
       <ul class="player-answers">
         {{#each game.randomPlayers}}
-          <li><strong>{{ this.answer }}</strong> &mdash; {{ this.name }}</li>
+          <li><strong>{{ this.answer }}</strong></li>
         {{/each}}
       </ul>
     </div><!-- /.gameplay-container -->
@@ -288,12 +288,14 @@
           {{/each}}
         </ul>
       {{else}}
-        <a href="#" class="btn-show-cards btn-contained">Continue</a>
+        <div class="button-container center">
+          <a href="#" class="btn-show-cards btn-contained">Continue</a>
+        </div>
       {{/if}}
     </div><!-- /.details-container -->
   {{else}}
     {{#if game.cardsBeenRead}}
-      <p>Click the card you think belongs to {{ game.turn }}.</p>
+      <p>Click the answer you think belongs to {{ game.turn }}.</p>
 
       <div class="gameplay-container">
         <p>{{ game.card }}</p>
@@ -330,23 +332,23 @@
         {{else}}
           <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
         {{/if}}
+
+        {{#each players}}
+          {{#if equals this.vote._id ../_id }}
+            <ul>
+              <li>{{this.name}} picked for this answer.</li>
+              <ul>
+                <li>+1 for {{this.vote.name}}</li>
+                {{#if this.vote.isTurn}}<li>+1 for {{ this.name }}</li>{{/if}}
+              </ul>
+            </ul>
+          {{/if}}
+        {{/each}}
       {{/each}}
     </ul>
   </div><!-- /.gameplay-container -->
 
   <div class="details-container">
-    {{#each players}}
-      {{#unless this.isTurn}}
-        <div class="answer-line">
-          <p>{{ this.name }} picked {{ this.vote.name }}'s answer</p>
-          <ul>
-            <li>+1 for {{ this.vote.name }}</li>
-            {{#if this.vote.isTurn}}<li>+1 for {{this.name}}</li>{{/if}}
-          </ul>
-        </div>
-      {{/unless}}
-    {{/each}}
-
     <div class="scores-container">
       <h3 class="scores-heading">Scores</h3>
       <div class="scores-grid-container">

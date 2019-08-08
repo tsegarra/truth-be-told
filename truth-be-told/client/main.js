@@ -405,6 +405,7 @@ Template.resultsView.helpers({
     });
     return scores;
   },
+  equals: function(a, b) { return a === b; },
 });
 
 Template.resultsView.events({
