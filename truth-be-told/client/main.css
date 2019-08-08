@@ -351,6 +351,33 @@ p.player-status {
 }
 
 /** Scores **/
+.scores-grid-cells {
+  font-size:0;
+}
+
+.scores-row {
+  margin-bottom:8px;
+}
+
+.scores-grid-cell {
+  font-size:0;
+  width:5%;
+  display:inline-block;
+  height:20px;
+  border:1px solid #000;
+  border-left:none;
+  margin-right:-1px;
+}
+
+.scores-grid-cell:first-child {
+  border-left:1px solid;
+  margin-left:-1px;
+}
+
+.scores-grid-cell.filled {
+  background-color:#c300c3;
+}
+
 .answer-line p {
   margin-bottom: 0;
 }
@@ -366,41 +393,23 @@ p.player-status {
 .scores-heading {
   border-bottom: 1px solid #b6b6b6;
   padding-bottom: 2px;
-  margin-bottom:0;
   font-weight:normal;
-}
-
-span.point {
-  display: inline-block;
-  font-size: 0;
-  width: 10px;
-  height: 10px;
-  border: 1px solid black;
-  vertical-align: top;
-  border-radius: 50%;
-  margin-top: 3px;
-}
-
-span.point.has-point {
-  background-color: #c300c3;
-}
-
-table > tr > td:last-child {
-  border-bottom: 1px solid #b6b6b6;
-  padding-bottom:8px;
-  padding-top:12px;
-}
-
-table > tr > td:first-child {
-  font-size: 13px;
-  padding-right: 8px;
-}
-
-table > tr:last-child > td {
-  border-bottom: 0;
+  margin-bottom:8px;
 }
 
 .scores-container {
   width:100%;
   max-width:400px;
+  margin-bottom:24px;
+}
+
+.score-label-container {
+  position:relative;
+  font-size:14px;
+}
+
+.score-label-container > .score {
+  position:absolute;
+  right:0;
+  top:0;
 }

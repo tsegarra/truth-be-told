@@ -349,22 +349,26 @@
 
     <div class="scores-container">
       <h3 class="scores-heading">Scores</h3>
-      <table>
+      <div class="scores-grid-container">
         {{#each scores}}
-          <tr>
-            <td>{{ this.name }}</td>
-            <td>
+          <div class="scores-row">
+            <div class="score-label-container">
+              <span class="score-name">{{ this.name }}</span>
+              &nbsp;
+              <span class="score">{{ this.score }}</span>
+            </div>
+            <div class="scores-grid-cells">
               {{#each score in this.scores }}
                 {{#if score}}
-                  <span class="point has-point">1</span>
+                  <div class="scores-grid-cell filled">1</div>
                 {{else}}
-                  <span class="point">0</span>
+                  <div class="scores-grid-cell">0</div>
                 {{/if}}
               {{/each}}
-            </td>
-          </tr>
+            </div>
+          </div>
         {{/each}}
-      </table>
+      </div><!-- /.scores-grid-container -->
     </div><!-- /.scores-container -->
   </div><!-- /.details-container -->
 

@@ -396,6 +396,7 @@ Template.resultsView.helpers({
     players.forEach(function(player) {
       score = {};
       score['name'] = player.name;
+      score['score'] = player.score;
       score['scores'] = [];
       for (var i = 0; i < 20; i++) {
         score['scores'].push(i < player.score);
