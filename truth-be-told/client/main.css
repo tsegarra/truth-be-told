@@ -163,18 +163,30 @@ header h5 {
 }
 
 footer {
-  font-size:10px;
-  text-align:right;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  box-sizing: border-box;
   padding:16px;
+  border-top:1px solid;
 }
 
 footer.homepage-footer {
   text-align:center;
+  position:static;
+  background-color:transparent;
+  font-size:10px;
 }
 
 footer.homepage-footer a,
 footer.homepage-footer a:visited {
   color: #c300c3;
+}
+
+footer .access-code-group {
+  font-size:10px;
+  text-align:right;
 }
 
 /** Game View **/

@@ -155,7 +155,7 @@
     {{ else }}
       <form id="card-form">
         <p class="card-text">{{ game.card }}</p>
-        <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
+        <input type="text" id="answer" name="answer" autocapitalize="none" autocomplete="off" value={{player.previousAnswer}} />
         <input class="btn-contained card-submit" type="submit" value="Submit" />
       </form>
       <script>
@@ -189,25 +189,7 @@
     {{/if}}
   </div><!-- /.gameplay-container -->
 
-  <div class="details-container">
-    <p>Players</p>
-    <ul class="players">
-      {{#each players}}
-        <li>
-          {{# if this.isCurrent }}
-            You
-          {{ else }}
-            {{ this.name }}
-          {{/if}}
-          {{#if this.answer }}
-            <i class="material-icons md-18 green">check_circle</i>
-          {{/if}}
-        </li>
-      {{/each}}
-    </ul>
-  </div><!-- /.details-container -->
-
-  <footer>Access code: {{ game.accessCode }}</footer>
+  {{> footer turn=game.turn accessCode=game.accessCode players=players }}
 </template>
 
 <template name="reviewView">
@@ -251,7 +233,8 @@
       <div class="spinner"></div>
     </div>
   {{/if}}
-  <footer>Access code: {{ game.accessCode }}</footer>
+
+  {{> footer turn=game.turn accessCode=game.accessCode players=players }}
 </template>
 
 <template name="voteView">
@@ -319,7 +302,8 @@
       </div>
     {{/if}}
   {{/if}}
-  <footer>Access code: {{ game.accessCode }}</footer>
+
+  {{> footer turn=game.turn accessCode=game.accessCode players=players }}
 </template>
 
 <template name="resultsView">
@@ -385,7 +369,7 @@
     {{/if}}
   </div>
 
-  <footer>Access code: {{ game.accessCode }}</footer>
+  {{> footer turn=game.turn accessCode=game.accessCode players=players }}
 </template>
 
 <template name="inGameHeader">
@@ -394,4 +378,34 @@
       <h5>Truth Be Told</h5>
     </div>
   </header>
+</template>
+
+<template name="footer">
+  <footer>
+    <div class="turn-group">
+      <label>Turn</label>
+      <span>{{ turn }}</span>
+    </div>
+
+    <div class="players-group">
+      <ul class="players">
+        {{#each players}}
+          <li>
+            {{# if this.isCurrent }}
+              You
+            {{ else }}
+              {{ this.name }}
+            {{/if}}
+            {{#if this.answer }}
+              <i class="material-icons md-18 green">check_circle</i>
+            {{/if}}
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+
+    <div class="access-code-group">
+      <label>Access code: </label><span>{{ accessCode }}</span>
+    </div>
+  </footer>
 </template>
