@@ -382,10 +382,13 @@
 
 <template name="footer">
   <footer>
-    <div class="turn-group">
-      <label>Turn</label>
-      <span>{{ turn }}</span>
-    </div>
+    <nav>
+      <div class="turn-group">
+        <label>Turn: </label><span>{{ turn }}</span>
+      </div>
+
+      <i class="material-icons md-24">expand_less</i>
+    </nav>
 
     <div class="players-group">
       <ul class="players">

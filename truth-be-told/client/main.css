@@ -177,6 +177,7 @@ footer.homepage-footer {
   position:static;
   background-color:transparent;
   font-size:10px;
+  border:none;
 }
 
 footer.homepage-footer a,
