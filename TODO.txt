@@ -1,0 +1,7 @@
+Style expandable footer dashboard featuring turn
+Simplify duplicate selection
+Bug: second box in score sometimes transparent
+Allow user to change "a" to "a(n)"
+Clearer directions
+Show answers as full sentences everywhere
+Replace scores with a clean horizontal bar graph
