@@ -155,7 +155,7 @@
     {{ else }}
       <form id="card-form">
         <p class="card-text">{{ game.card }}</p>
-        <input type="text" id="answer" name="answer" autocomplete="off" value={{player.previousAnswer}} />
+        <input type="text" id="answer" name="answer" autocorrect="off" autocapitalize="off" autocomplete="off" value={{player.previousAnswer}} />
         <input class="btn-contained card-submit" type="submit" value="Submit" />
       </form>
       <script>
@@ -323,7 +323,7 @@
 </template>
 
 <template name="resultsView">
-  <div class="gameplay-container">
+  <div class="gameplay-container results">
     <p>{{game.card}}</p>
     <ul>
       {{#each players}}

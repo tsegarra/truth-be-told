@@ -446,3 +446,17 @@ p.player-status {
   border-radius: 4px;
   color: #fff;
 }
+
+.gameplay-container.results > p:first-child {
+  font-size:24px;
+}
+
+.gameplay-container.results > ul > li {
+  border-top:1px solid #ccc;
+  padding-top:16px;
+}
+
+.gameplay-container.results > ul > li:first-child {
+  border-top:none;
+  padding-top:0;
+}

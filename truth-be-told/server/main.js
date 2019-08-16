@@ -38,6 +38,7 @@ Games.find({'state': 'settingUp'}).observeChanges({
       Players.update(player._id, {$set: {
         isTurn: index === turnId,
         answer: null,
+        previousAnswer: null,
         vote: null,
         score: 0,
       }});
@@ -121,7 +122,6 @@ Games.find({'state': 'scoring'}).observeChanges({
 });
 
 Games.find({'state': 'settingUpNextRound'}).observeChanges({
-  // @TODO reset player.previousAnswer
   added: function (id, state) {
     var players = Players.find({ 'gameID': id }, {'sort': {'createdAt': 1}});
     var turnIndex, nextTurnIndex;
