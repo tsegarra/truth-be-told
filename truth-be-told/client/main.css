@@ -257,7 +257,18 @@ ul.players .material-icons {
   color: #c300c3;
 }
 
+li.correct-answer > ul {
+  padding-left:24px;
+  color:#000;
+}
+
 li.correct-answer {
+  border:1px solid #02aa02 !important;
+  padding:16px !important;
+  border-radius:4px;
+}
+
+li.correct-answer strong {
   color:#02aa02;
 }
 

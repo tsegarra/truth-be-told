@@ -328,22 +328,36 @@
     <ul>
       {{#each players}}
         {{#if this.isTurn}}
-          <li class="correct-answer"><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
-        {{else}}
-          <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
+          <li class="correct-answer"><strong>{{ this.answer }}</strong> &mdash; {{this.name}}
+            {{#each players}}
+              {{#if equals this.vote._id ../_id }}
+                <ul>
+                  <li>{{this.name}} picked this answer.</li>
+                  <ul>
+                    <li>+1 for {{this.vote.name}}</li>
+                    {{#if this.vote.isTurn}}<li>+1 for {{ this.name }}</li>{{/if}}
+                  </ul>
+                </ul>
+              {{/if}}
+            {{/each}}
+          </li>
         {{/if}}
-
-        {{#each players}}
-          {{#if equals this.vote._id ../_id }}
-            <ul>
-              <li>{{this.name}} picked for this answer.</li>
+      {{/each}}
+      {{#each players}}
+        {{#unless this.isTurn}}
+          <li><strong>{{ this.answer }}</strong> &mdash; {{this.name}}</li>
+          {{#each players}}
+            {{#if equals this.vote._id ../_id }}
               <ul>
-                <li>+1 for {{this.vote.name}}</li>
-                {{#if this.vote.isTurn}}<li>+1 for {{ this.name }}</li>{{/if}}
+                <li>{{this.name}} picked this answer.</li>
+                <ul>
+                  <li>+1 for {{this.vote.name}}</li>
+                  {{#if this.vote.isTurn}}<li>+1 for {{ this.name }}</li>{{/if}}
+                </ul>
               </ul>
-            </ul>
-          {{/if}}
-        {{/each}}
+            {{/if}}
+          {{/each}}
+        {{/unless}}
       {{/each}}
     </ul>
   </div><!-- /.gameplay-container -->
