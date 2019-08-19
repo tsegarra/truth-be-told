@@ -76,7 +76,7 @@
 
   {{#if playerExists}}
     <div class="details-container">
-        <p>A player with this name already exists. If you join the game, you'll be logged in as that player.</p>
+        <p class="joingame-warning">A player with this name already exists. If you join the game, you'll be logged in as that player.</p>
     </div>
   {{/if}}
   <form id="join-game" class="center">
@@ -88,6 +88,10 @@
       <button class="btn-back btn-outlined">Back</button>
     </div>
   </form>
+
+  <div>
+    <p class="explain-signin">If you're already in the middle of a game, enter the same username again to sign in.</p>
+  </div>
 </template>
 
 <template name="lobby">

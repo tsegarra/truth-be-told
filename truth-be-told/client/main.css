@@ -187,6 +187,15 @@ footer.homepage-footer a:visited {
   margin-bottom:16px;
 }
 
+.details-container > p.joingame-warning {
+  margin-bottom:16px;
+  padding-bottom:8px;
+}
+
+.explain-signin {
+  font-size:12px;
+}
+
 #card-form {
   display:inline-block;
 }
