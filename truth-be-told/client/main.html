@@ -216,9 +216,19 @@
 
 <template name="reviewView">
   {{#if player.isTurn}}
-    <div class="instruction-container">
-      <p class="player-status">Review the answers below. If there are any duplicates, select all but one to be revised before continuing. If there are no duplicates, click Continue.</p>
-    </div><!-- /.instruction-container -->
+    {{#if game.dupesExist }}
+      <div class="instruction-container">
+        <p class="player-status">Select all responses to be returned to the author for revision, then click Continue.</p>
+      </div><!-- /.instruction-container -->
+    {{else}}
+      <div class="dupe-prompt">
+        <p>Are there any duplicate responses below?</p>
+        <div class="dupe-prompt-links">
+          <button class="btn-duplicates-yes btn-outlined">Yes</button>
+          <button class="btn-duplicates-no btn-outlined">No</button>
+        </div>
+      </div>
+    {{/if}}
 
     <p class="card-text">{{ game.card }}</p>
 
@@ -226,19 +236,21 @@
       <form id="review-answers">
         {{#each players}}
           <div class="answer-checkboxes">
-            <div class="checkbox-container">
-              {{#if this.isTurn}}
-                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" />
-              {{else}}
-                <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" />
-              {{/if}}
-              <div class="checkbox-background">
-                <svg class="checkbox-checkmark" viewBox="0 0 24 24">
-                  <path class="checkbox-checkmark-path" fill="none" stroke="#fff"
-                    d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
-                </svg>
+            {{#if game.dupesExist}}
+              <div class="checkbox-container">
+                {{#if this.isTurn}}
+                  <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" disabled="disabled" />
+                {{else}}
+                  <input type="checkbox" id="answer-{{this._id}}" name="{{this._id}}" />
+                {{/if}}
+                <div class="checkbox-background">
+                  <svg class="checkbox-checkmark" viewBox="0 0 24 24">
+                    <path class="checkbox-checkmark-path" fill="none" stroke="#fff"
+                      d="M1.73,12.91 8.1,19.28 22.79,4.59"></path>
+                  </svg>
+                </div>
               </div>
-            </div>
+            {{/if}}
             {{#if this.isTurn}}
               <label for="answer-{{this._id}}"><strong>{{this.answer}}</strong></label>
             {{else}}
@@ -246,7 +258,9 @@
             {{/if}}
           </div>
         {{/each}}
-        <input class="btn-contained" type="submit" value="Continue" />
+        {{#if game.dupesExist}}
+          <input class="btn-contained" type="submit" value="Continue" />
+        {{/if}}
       </form>
     </div><!-- /.gameplay-container-->
   {{else}}

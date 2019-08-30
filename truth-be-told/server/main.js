@@ -136,6 +136,7 @@ Games.find({'state': 'settingUpNextRound'}).observeChanges({
         answer: null,
         previousAnswer: null,
         vote: null,
+        dupesExist: false,
         isTurn: index === nextTurnIndex,
       }});
       if (index === nextTurnIndex) turnName = player.name;

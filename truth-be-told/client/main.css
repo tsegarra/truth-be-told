@@ -237,6 +237,10 @@ form#review-answers input[type="submit"] {
   margin-bottom:0;
 }
 
+.dupe-prompt {
+  text-align:center;
+}
+
 ul.player-answers {
   text-align:left;
 }

@@ -33,6 +33,7 @@ function generateNewGame() {
     cardsBeenRead: false,
     turn: null,
     winners: null,
+    dupesExist: false,
   };
 
   var gameID = Games.insert(game);
@@ -319,6 +320,17 @@ Template.reviewView.helpers({
 });
 
 Template.reviewView.events({
+  'click .btn-duplicates-yes': function(event) {
+    var game = getCurrentGame();
+    Games.update(game._id, {$set: {
+      dupesExist: true,
+    }});
+  },
+
+  'click .btn-duplicates-no': function(event) {
+    $('#review-answers').submit();
+  },
+
   'submit #review-answers': function(event) {
     var game = getCurrentGame();
     var players = getAllPlayers();
