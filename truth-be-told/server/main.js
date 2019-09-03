@@ -51,6 +51,7 @@ Games.find({'state': 'settingUp'}).observeChanges({
       state: 'inProgress',
       turn: turnName,
       cardsBeenRead: false,
+      dupesExist: false,
     }});
   }
 });
@@ -136,7 +137,6 @@ Games.find({'state': 'settingUpNextRound'}).observeChanges({
         answer: null,
         previousAnswer: null,
         vote: null,
-        dupesExist: false,
         isTurn: index === nextTurnIndex,
       }});
       if (index === nextTurnIndex) turnName = player.name;
@@ -146,6 +146,7 @@ Games.find({'state': 'settingUpNextRound'}).observeChanges({
       card: Cards[Math.floor(Math.random()*Cards.length)],
       cardsBeenRead: false,
       state: 'inProgress',
+      dupesExist: false,
       turn: turnName,
     }});
   },
